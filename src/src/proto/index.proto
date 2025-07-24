@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package location;
+
+service LocationService {
+  rpc GetPoliticalState (GetPoliticalStatePayload) returns (GetPoliticalStateResponse) {};
+}
+
+message GetPoliticalStatePayload {
+  string id = 1;
+}
+
+message GetPoliticalStateResponse {
+  PoliticalState political_state = 1;
+}
+
+message PoliticalState {
+  string id = 1;
+  string name = 2;
+  string country_id = 3;
+}

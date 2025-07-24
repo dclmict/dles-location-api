@@ -1,0 +1,50 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
+import 'dotenv/config';
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { ValidationPipe, VersioningType } from '@nestjs/common';
+import { join } from 'path';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.GRPC,
+    options: {
+      package: 'location',
+      protoPath: join(__dirname, 'proto/index.proto'),
+      url: 'localhost:5000',
+    },
+  });
+
+  app.enableVersioning({
+    type: VersioningType.HEADER,
+    header: 'Accept-Version',
+  });
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+    }),
+  );
+
+  const config = new DocumentBuilder()
+    .setTitle('DCLM LOCATION API')
+    .setDescription('Doucmentation of DLES LOCATION API')
+    .setVersion('1.0')
+    .addApiKey({ type: 'apiKey', name: 'X-API-KEY', in: 'header' }, 'X-API-KEY')
+    .addSecurityRequirements('X-API-KEY', ['X-API-KEY'])
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+
+  SwaggerModule.setup('docs', app, document);
+
+  await app.startAllMicroservices();
+  await app.listen(3000);
+}
+
+bootstrap();

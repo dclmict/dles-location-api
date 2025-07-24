@@ -1,0 +1,265 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/sequelize';
+import {
+  Zone,
+  Country,
+  PoliticalState,
+  ChurchState,
+  Region,
+  Group,
+  District,
+} from 'src/models';
+import { UtilsService } from 'src/utils/utils.service';
+import {
+  CreateChurchStateDto,
+  CreateCountryDto,
+  CreateDistrictDto,
+  CreateGroupDto,
+  CreatePoliticalStateDto,
+  CreateRegionDto,
+  CreateZoneDto,
+} from './dto';
+import { attributesToExclude } from 'src/consts';
+
+@Injectable()
+export class LocationService {
+  constructor(
+    @InjectModel(Zone)
+    private readonly zoneModel: typeof Zone,
+
+    @InjectModel(Country)
+    private readonly countryModel: typeof Country,
+
+    @InjectModel(PoliticalState)
+    private readonly politicalStateModel: typeof PoliticalState,
+
+    @InjectModel(ChurchState)
+    private readonly churchStateModel: typeof ChurchState,
+
+    @InjectModel(Region)
+    private readonly regionModel: typeof Region,
+
+    @InjectModel(Group)
+    private readonly groupModel: typeof Group,
+
+    @InjectModel(District)
+    private readonly districtModel: typeof District,
+
+    private readonly utilService: UtilsService,
+  ) {}
+
+  async createZone(createZoneDto: CreateZoneDto) {
+    try {
+      const data = await this.zoneModel.create({ ...createZoneDto });
+      return this.utilService.HttpSuccess(
+        HttpStatus.CREATED,
+        'Zone created successfully',
+        data,
+      );
+    } catch (err) {
+      /* istanbul ignore next */
+      throw new HttpException(
+        err?.message || 'Failed to create zone',
+        err?.status || HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async createCountry(createCountryDto: CreateCountryDto) {
+    try {
+      const data = await this.countryModel.create({ ...createCountryDto });
+      return this.utilService.HttpSuccess(
+        HttpStatus.CREATED,
+        'Country created successfully',
+        data,
+      );
+    } catch (err) {
+      /* istanbul ignore next */
+      throw new HttpException(
+        err?.message || 'Failed to create country',
+        err?.status || HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async createPoliticalState(createPoliticalStateDto: CreatePoliticalStateDto) {
+    try {
+      const data = await this.politicalStateModel.create({
+        ...createPoliticalStateDto,
+      });
+      return this.utilService.HttpSuccess(
+        HttpStatus.CREATED,
+        'Political state created successfully',
+        data,
+      );
+    } catch (err) {
+      /* istanbul ignore next */
+      throw new HttpException(
+        err?.message || 'Failed to create political state',
+        err?.status || HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async createChurchState(createChurchStateDto: CreateChurchStateDto) {
+    try {
+      const { country_id } = createChurchStateDto;
+
+      const latestChurchState = await this.churchStateModel.findOne({
+        where: { country_id },
+        order: [['state_country_id', 'DESC']],
+        attributes: ['state_country_id'],
+        raw: true,
+      });
+
+      /* istanbul ignore next */
+      const nextStateCountryId = latestChurchState
+        ? latestChurchState.state_country_id + 1
+        : 1;
+
+      const newChurchState = await this.churchStateModel.create({
+        ...createChurchStateDto,
+        state_country_id: nextStateCountryId,
+      });
+
+      return this.utilService.HttpSuccess(
+        HttpStatus.CREATED,
+        'Church state created successfully',
+        newChurchState,
+      );
+    } catch (err) {
+      /* istanbul ignore next */
+      throw new HttpException(
+        err?.message || 'Failed to create church state',
+        err?.status || HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async createRegion(createRegionDto: CreateRegionDto) {
+    try {
+      const { church_state_id } = createRegionDto;
+
+      const latestRegion = await this.regionModel.findOne({
+        where: { church_state_id },
+        order: [['region_state_id', 'DESC']],
+        attributes: ['region_state_id'],
+        raw: true,
+      });
+
+      /* istanbul ignore next */
+      const nextRegionStateId = latestRegion
+        ? latestRegion.region_state_id + 1
+        : 1;
+
+      const newRegion = await this.regionModel.create({
+        ...createRegionDto,
+        region_state_id: nextRegionStateId,
+      });
+
+      return this.utilService.HttpSuccess(
+        HttpStatus.CREATED,
+        'Region created successfully',
+        newRegion,
+      );
+    } catch (err) {
+      /* istanbul ignore next */
+      throw new HttpException(
+        err?.message || 'Failed to create region',
+        err?.status || HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async createGroup(createGroupDto: CreateGroupDto) {
+    try {
+      const { region_id } = createGroupDto;
+
+      const latestGroup = await this.groupModel.findOne({
+        where: { region_id },
+        order: [['group_region_id', 'DESC']],
+        attributes: ['group_region_id'],
+        raw: true,
+      });
+
+      /* istanbul ignore next */
+      const nextGroupRegionId = latestGroup
+        ? latestGroup.group_region_id + 1
+        : 1;
+
+      const newGroup = await this.groupModel.create({
+        ...createGroupDto,
+        group_region_id: nextGroupRegionId,
+      });
+
+      return this.utilService.HttpSuccess(
+        HttpStatus.CREATED,
+        'Group created successfully',
+        newGroup,
+      );
+    } catch (err) {
+      /* istanbul ignore next */
+      throw new HttpException(
+        err?.message || 'Failed to create group',
+        err?.status || HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async createDistrict(createDistrictDto: CreateDistrictDto) {
+    try {
+      const { group_id } = createDistrictDto;
+
+      const latestDistrict = await this.districtModel.findOne({
+        where: { group_id },
+        order: [['district_group_id', 'DESC']],
+        attributes: ['district_group_id'],
+        raw: true,
+      });
+
+      /* istanbul ignore next */
+      const nextDistrictGroupId = latestDistrict
+        ? latestDistrict.district_group_id + 1
+        : 1;
+
+      const newDistrict = await this.districtModel.create({
+        ...createDistrictDto,
+        district_group_id: nextDistrictGroupId,
+      });
+
+      return this.utilService.HttpSuccess(
+        HttpStatus.CREATED,
+        'District created successfully',
+        newDistrict,
+      );
+    } catch (err) {
+      /* istanbul ignore next */
+      throw new HttpException(
+        err?.message || 'Failed to create district',
+        err?.status || HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async getPoliticalStateById(id: string) {
+    try {
+      const politicalState = await this.politicalStateModel.findByPk(id, {
+        attributes: { exclude: attributesToExclude },
+      });
+
+      return this.utilService.HttpSuccess(
+        HttpStatus.OK,
+        'Data retrieved successfully',
+        politicalState,
+      );
+    } catch (err) {
+      /* istanbul ignore next */
+      throw new HttpException(
+        err?.message || 'An error occurred',
+        err?.status || HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+}
