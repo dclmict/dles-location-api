@@ -243,6 +243,46 @@ export class LocationService {
     }
   }
 
+  async getZoneById(id: string) {
+    try {
+      const zone = await this.zoneModel.findByPk(id, {
+        attributes: { exclude: attributesToExclude },
+      });
+
+      return this.utilService.HttpSuccess(
+        HttpStatus.OK,
+        'Data retrieved successfully',
+        zone,
+      );
+    } catch (err) {
+      /* istanbul ignore next */
+      throw new HttpException(
+        err?.message || 'An error occurred',
+        err?.status || HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async getCountryById(id: string) {
+    try {
+      const country = await this.countryModel.findByPk(id, {
+        attributes: { exclude: attributesToExclude },
+      });
+
+      return this.utilService.HttpSuccess(
+        HttpStatus.OK,
+        'Data retrieved successfully',
+        country,
+      );
+    } catch (err) {
+      /* istanbul ignore next */
+      throw new HttpException(
+        err?.message || 'An error occurred',
+        err?.status || HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
   async getPoliticalStateById(id: string) {
     try {
       const politicalState = await this.politicalStateModel.findByPk(id, {
@@ -253,6 +293,86 @@ export class LocationService {
         HttpStatus.OK,
         'Data retrieved successfully',
         politicalState,
+      );
+    } catch (err) {
+      /* istanbul ignore next */
+      throw new HttpException(
+        err?.message || 'An error occurred',
+        err?.status || HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async getChurchStateById(id: string) {
+    try {
+      const churchState = await this.churchStateModel.findByPk(id, {
+        attributes: { exclude: attributesToExclude },
+      });
+
+      return this.utilService.HttpSuccess(
+        HttpStatus.OK,
+        'Data retrieved successfully',
+        churchState,
+      );
+    } catch (err) {
+      /* istanbul ignore next */
+      throw new HttpException(
+        err?.message || 'An error occurred',
+        err?.status || HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async getRegionById(id: string) {
+    try {
+      const region = await this.regionModel.findByPk(id, {
+        attributes: { exclude: attributesToExclude },
+      });
+
+      return this.utilService.HttpSuccess(
+        HttpStatus.OK,
+        'Data retrieved successfully',
+        region,
+      );
+    } catch (err) {
+      /* istanbul ignore next */
+      throw new HttpException(
+        err?.message || 'An error occurred',
+        err?.status || HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async getGroupById(id: string) {
+    try {
+      const group = await this.groupModel.findByPk(id, {
+        attributes: { exclude: attributesToExclude },
+      });
+
+      return this.utilService.HttpSuccess(
+        HttpStatus.OK,
+        'Data retrieved successfully',
+        group,
+      );
+    } catch (err) {
+      /* istanbul ignore next */
+      throw new HttpException(
+        err?.message || 'An error occurred',
+        err?.status || HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async getDistrictById(id: string) {
+    try {
+      const district = await this.districtModel.findByPk(id, {
+        attributes: { exclude: attributesToExclude },
+      });
+
+      return this.utilService.HttpSuccess(
+        HttpStatus.OK,
+        'Data retrieved successfully',
+        district,
       );
     } catch (err) {
       /* istanbul ignore next */

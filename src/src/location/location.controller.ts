@@ -1,8 +1,6 @@
 import { Body, Controller, Get, HttpStatus, Param, Post } from '@nestjs/common';
 import { LocationService } from './location.service';
 import { GrpcMethod } from '@nestjs/microservices';
-// import { GetPoliticalStatePayload } from 'src/types/proto/location/GetPoliticalStatePayload';
-// import { GetPoliticalStateResponse } from 'src/types/proto/location/GetPoliticalStateResponse';
 import {
   CreateChurchStateDto,
   createChurchStateResponseExample,
@@ -18,7 +16,9 @@ import {
   createRegionResponseExample,
   CreateZoneDto,
   createZoneResponseExample,
+  getCountryByIdResponseExample,
   getPoliticalStateByIdResponseExample,
+  getZoneByIdResponseExample,
 } from './dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import {
@@ -116,6 +116,28 @@ export class LocationController {
     return this.locationService.createDistrict(createDistrictDto);
   }
 
+  @Get('/zone/:id')
+  @ApiOperation({ summary: 'Get a zone by id' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Data retrieved successfully',
+    example: getZoneByIdResponseExample,
+  })
+  getZoneById(@Param('id') id: string) {
+    return this.locationService.getZoneById(id);
+  }
+
+  @Get('/country/:id')
+  @ApiOperation({ summary: 'Get a country by id' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Data retrieved successfully',
+    example: getCountryByIdResponseExample,
+  })
+  getCountryById(@Param('id') id: string) {
+    return this.locationService.getCountryById(id);
+  }
+
   @Get('/political-state/:id')
   @ApiOperation({ summary: 'Get a political state by id' })
   @ApiResponse({
@@ -125,6 +147,50 @@ export class LocationController {
   })
   getPoliticalStateById(@Param('id') id: string) {
     return this.locationService.getPoliticalStateById(id);
+  }
+
+  @Get('/church-state/:id')
+  @ApiOperation({ summary: 'Get a church state by id' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Data retrieved successfully',
+    example: getPoliticalStateByIdResponseExample,
+  })
+  getChurchStateById(@Param('id') id: string) {
+    return this.locationService.getChurchStateById(id);
+  }
+
+  @Get('/region/:id')
+  @ApiOperation({ summary: 'Get a region by id' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Data retrieved successfully',
+    example: getPoliticalStateByIdResponseExample,
+  })
+  getRegionById(@Param('id') id: string) {
+    return this.locationService.getRegionById(id);
+  }
+
+  @Get('/group/:id')
+  @ApiOperation({ summary: 'Get a group by id' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Data retrieved successfully',
+    example: getPoliticalStateByIdResponseExample,
+  })
+  getGroupById(@Param('id') id: string) {
+    return this.locationService.getGroupById(id);
+  }
+
+  @Get('/district/:id')
+  @ApiOperation({ summary: 'Get a district by id' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Data retrieved successfully',
+    example: getPoliticalStateByIdResponseExample,
+  })
+  getDistrictById(@Param('id') id: string) {
+    return this.locationService.getDistrictById(id);
   }
 }
 
