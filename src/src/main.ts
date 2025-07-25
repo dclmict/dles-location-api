@@ -10,6 +10,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.setGlobalPrefix('/location/v1');
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
     options: {
@@ -33,7 +34,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('DCLM LOCATION API')
-    .setDescription('Doucmentation of DLES LOCATION API')
+    .setDescription('Doucmentation of DCLM LOCATION API')
     .setVersion('1.0')
     .addApiKey({ type: 'apiKey', name: 'X-API-KEY', in: 'header' }, 'X-API-KEY')
     .addSecurityRequirements('X-API-KEY', ['X-API-KEY'])
@@ -41,7 +42,7 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
 
-  SwaggerModule.setup('docs', app, document);
+  SwaggerModule.setup('/location/v1/docs', app, document);
 
   await app.startAllMicroservices();
   await app.listen(3000);
