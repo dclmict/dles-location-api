@@ -33,7 +33,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('DCLM LOCATION API')
-    .setDescription('Doucmentation of DLES LOCATION API')
+    .setDescription('Documentation of DLES LOCATION API')
     .setVersion('1.0')
     .addApiKey({ type: 'apiKey', name: 'X-API-KEY', in: 'header' }, 'X-API-KEY')
     .addSecurityRequirements('X-API-KEY', ['X-API-KEY'])
