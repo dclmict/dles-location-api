@@ -34,7 +34,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('DCLM LOCATION API')
-    .setDescription('Doucmentation of DCLM LOCATION API')
+    .setDescription('Documentation of DLES LOCATION API')
     .setVersion('1.0')
     .addApiKey({ type: 'apiKey', name: 'X-API-KEY', in: 'header' }, 'X-API-KEY')
     .addSecurityRequirements('X-API-KEY', ['X-API-KEY'])
@@ -45,7 +45,7 @@ async function bootstrap() {
   SwaggerModule.setup('/location/v1/docs', app, document);
 
   await app.startAllMicroservices();
-  await app.listen(3000);
+  await app.listen(process.env.HTTP_PORT || 3000);
 }
 
 bootstrap();
