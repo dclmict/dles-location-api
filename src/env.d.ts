@@ -7,6 +7,7 @@ export interface Env {
   DATABASE_USERNAME: string;
   DATABASE_PASSWORD: string;
   DATABASE_NAME: string;
+  X_API_KEY: string;
 }
 
 declare global {

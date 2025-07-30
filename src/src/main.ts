@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import 'dotenv/config';
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { join } from 'path';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ApiKeyGuard } from './guards';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -31,6 +32,9 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+
+  const reflector = app.get(Reflector);
+  app.useGlobalGuards(new ApiKeyGuard(reflector));
 
   const config = new DocumentBuilder()
     .setTitle('DCLM LOCATION API')
