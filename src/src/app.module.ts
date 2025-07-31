@@ -5,10 +5,27 @@ import { AppService } from './app.service';
 import { LocationModule } from './location/location.module';
 import { UtilsService } from './utils/utils.service';
 import { SequelizeModule } from '@nestjs/sequelize';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ApiKeyGuard } from './guards/api-key.guard';
 
 @Module({
   imports: [
-    SequelizeModule.forFeature([]),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
+
+    ThrottlerModule.forRootAsync({
+      useFactory: (configService: ConfigService) => [
+        {
+          ttl: parseInt(configService.get('THROTTLE_TTL') || '') * 1000,
+          limit: parseInt(configService.get('THROTTLE_LIMIT') || ''),
+        },
+      ],
+      inject: [ConfigService],
+    }),
     SequelizeModule.forRoot({
       dialect: 'mysql',
       host: process.env.DATABASE_HOST,
@@ -25,6 +42,17 @@ import { SequelizeModule } from '@nestjs/sequelize';
     LocationModule,
   ],
   controllers: [AppController],
-  providers: [AppService, UtilsService],
+  providers: [
+    AppService,
+    UtilsService,
+    {
+      provide: APP_GUARD,
+      useClass: ApiKeyGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class AppModule {}

@@ -31,7 +31,7 @@ export const createDistrictResponseExample = {
 };
 
 export const getDistrictByIdResponseExample = {
-  statusCode: 201,
+  statusCode: 200,
   message: 'Data retrieved successfully',
   data: {
     id: '1f067ffa-14a2-6e00-9ea3-d505ca72eec0',
