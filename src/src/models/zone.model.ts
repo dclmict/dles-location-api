@@ -18,7 +18,7 @@ export class Zone extends Model {
     allowNull: false,
     defaultValue: uuid(),
   })
-  declare id?: string;
+  declare id: string;
 
   @Column({ type: DataType.STRING, allowNull: false })
   name: string;

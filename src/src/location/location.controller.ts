@@ -16,14 +16,30 @@ import {
   createRegionResponseExample,
   CreateZoneDto,
   createZoneResponseExample,
+  getChurchStateByIdResponseExample,
   getCountryByIdResponseExample,
+  getDistrictByIdResponseExample,
+  getGroupByIdResponseExample,
   getPoliticalStateByIdResponseExample,
+  getRegionByIdResponseExample,
   getZoneByIdResponseExample,
 } from './dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import {
+  GetChurchStatePayload,
+  GetChurchStateResponse,
+  GetCountryPayload,
+  GetCountryResponse,
+  GetDistrictPayload,
+  GetDistrictResponse,
+  GetGroupPayload,
+  GetGroupResponse,
   GetPoliticalStatePayload,
   GetPoliticalStateResponse,
+  GetRegionPayload,
+  GetRegionResponse,
+  GetZonePayload,
+  GetZoneResponse,
 } from 'src/types/proto/index.location';
 
 @Controller('location')
@@ -154,7 +170,7 @@ export class LocationController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Data retrieved successfully',
-    example: getPoliticalStateByIdResponseExample,
+    example: getChurchStateByIdResponseExample,
   })
   getChurchStateById(@Param('id') id: string) {
     return this.locationService.getChurchStateById(id);
@@ -165,7 +181,7 @@ export class LocationController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Data retrieved successfully',
-    example: getPoliticalStateByIdResponseExample,
+    example: getRegionByIdResponseExample,
   })
   getRegionById(@Param('id') id: string) {
     return this.locationService.getRegionById(id);
@@ -176,7 +192,7 @@ export class LocationController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Data retrieved successfully',
-    example: getPoliticalStateByIdResponseExample,
+    example: getGroupByIdResponseExample,
   })
   getGroupById(@Param('id') id: string) {
     return this.locationService.getGroupById(id);
@@ -187,7 +203,7 @@ export class LocationController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Data retrieved successfully',
-    example: getPoliticalStateByIdResponseExample,
+    example: getDistrictByIdResponseExample,
   })
   getDistrictById(@Param('id') id: string) {
     return this.locationService.getDistrictById(id);
@@ -204,5 +220,43 @@ export class GrpcLocationController {
   }: GetPoliticalStatePayload): Promise<GetPoliticalStateResponse> {
     const { data } = await this.locationService.getPoliticalStateById(id);
     return { political_state: data! };
+  }
+
+  @GrpcMethod('LocationService')
+  async getZone({ id }: GetZonePayload): Promise<GetZoneResponse> {
+    const { data } = await this.locationService.getZoneById(id);
+    return { zone: data! };
+  }
+
+  @GrpcMethod('LocationService')
+  async getCountry({ id }: GetCountryPayload): Promise<GetCountryResponse> {
+    const { data } = await this.locationService.getCountryById(id);
+    return { country: data! };
+  }
+
+  @GrpcMethod('LocationService')
+  async getChurchState({
+    id,
+  }: GetChurchStatePayload): Promise<GetChurchStateResponse> {
+    const { data } = await this.locationService.getChurchStateById(id);
+    return { church_state: data! };
+  }
+
+  @GrpcMethod('LocationService')
+  async getRegion({ id }: GetRegionPayload): Promise<GetRegionResponse> {
+    const { data } = await this.locationService.getRegionById(id);
+    return { region: data! };
+  }
+
+  @GrpcMethod('LocationService')
+  async getGroup({ id }: GetGroupPayload): Promise<GetGroupResponse> {
+    const { data } = await this.locationService.getGroupById(id);
+    return { group: data! };
+  }
+
+  @GrpcMethod('LocationService')
+  async getDistrict({ id }: GetDistrictPayload): Promise<GetDistrictResponse> {
+    const { data } = await this.locationService.getDistrictById(id);
+    return { district: data! };
   }
 }

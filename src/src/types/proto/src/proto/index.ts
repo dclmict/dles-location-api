@@ -9,18 +9,111 @@ import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
 import { Observable } from "rxjs";
 
+/** Payloads */
 export interface GetPoliticalStatePayload {
   id: string;
 }
 
+export interface GetZonePayload {
+  id: string;
+}
+
+export interface GetCountryPayload {
+  id: string;
+}
+
+export interface GetChurchStatePayload {
+  id: string;
+}
+
+export interface GetRegionPayload {
+  id: string;
+}
+
+export interface GetGroupPayload {
+  id: string;
+}
+
+export interface GetDistrictPayload {
+  id: string;
+}
+
+/** Responses */
 export interface GetPoliticalStateResponse {
   political_state?: PoliticalState | undefined;
+}
+
+export interface GetZoneResponse {
+  zone?: Zone | undefined;
+}
+
+export interface GetCountryResponse {
+  country?: Country | undefined;
+}
+
+export interface GetChurchStateResponse {
+  church_state?: ChurchState | undefined;
+}
+
+export interface GetRegionResponse {
+  region?: Region | undefined;
+}
+
+export interface GetGroupResponse {
+  group?: Group | undefined;
+}
+
+export interface GetDistrictResponse {
+  district?: District | undefined;
+}
+
+/** Entity Messages */
+export interface Zone {
+  id: string;
+  name: string;
+  currency: string;
+}
+
+export interface Country {
+  id: string;
+  name: string;
+  zone_id: string;
+  code: string;
+  flag: string;
 }
 
 export interface PoliticalState {
   id: string;
   name: string;
   country_id: string;
+}
+
+export interface ChurchState {
+  id: string;
+  name: string;
+  country_id: string;
+  state_country_id: number;
+}
+
+export interface Region {
+  id: string;
+  name: string;
+  church_state_id: string;
+  region_state_id: number;
+}
+
+export interface Group {
+  id: string;
+  name: string;
+  region_id: string;
+  group_region_id: number;
+}
+
+export interface District {
+  id: string;
+  name: string;
+  group_id: string;
+  district_group_id: number;
 }
 
 function createBaseGetPoliticalStatePayload(): GetPoliticalStatePayload {
@@ -39,6 +132,228 @@ export const GetPoliticalStatePayload: MessageFns<GetPoliticalStatePayload> = {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGetPoliticalStatePayload();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+};
+
+function createBaseGetZonePayload(): GetZonePayload {
+  return { id: "" };
+}
+
+export const GetZonePayload: MessageFns<GetZonePayload> = {
+  encode(message: GetZonePayload, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetZonePayload {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetZonePayload();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+};
+
+function createBaseGetCountryPayload(): GetCountryPayload {
+  return { id: "" };
+}
+
+export const GetCountryPayload: MessageFns<GetCountryPayload> = {
+  encode(message: GetCountryPayload, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetCountryPayload {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetCountryPayload();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+};
+
+function createBaseGetChurchStatePayload(): GetChurchStatePayload {
+  return { id: "" };
+}
+
+export const GetChurchStatePayload: MessageFns<GetChurchStatePayload> = {
+  encode(message: GetChurchStatePayload, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetChurchStatePayload {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetChurchStatePayload();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+};
+
+function createBaseGetRegionPayload(): GetRegionPayload {
+  return { id: "" };
+}
+
+export const GetRegionPayload: MessageFns<GetRegionPayload> = {
+  encode(message: GetRegionPayload, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetRegionPayload {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetRegionPayload();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+};
+
+function createBaseGetGroupPayload(): GetGroupPayload {
+  return { id: "" };
+}
+
+export const GetGroupPayload: MessageFns<GetGroupPayload> = {
+  encode(message: GetGroupPayload, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetGroupPayload {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetGroupPayload();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+};
+
+function createBaseGetDistrictPayload(): GetDistrictPayload {
+  return { id: "" };
+}
+
+export const GetDistrictPayload: MessageFns<GetDistrictPayload> = {
+  encode(message: GetDistrictPayload, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetDistrictPayload {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetDistrictPayload();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -85,6 +400,368 @@ export const GetPoliticalStateResponse: MessageFns<GetPoliticalStateResponse> = 
           }
 
           message.political_state = PoliticalState.decode(reader, reader.uint32());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+};
+
+function createBaseGetZoneResponse(): GetZoneResponse {
+  return {};
+}
+
+export const GetZoneResponse: MessageFns<GetZoneResponse> = {
+  encode(message: GetZoneResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.zone !== undefined) {
+      Zone.encode(message.zone, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetZoneResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetZoneResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.zone = Zone.decode(reader, reader.uint32());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+};
+
+function createBaseGetCountryResponse(): GetCountryResponse {
+  return {};
+}
+
+export const GetCountryResponse: MessageFns<GetCountryResponse> = {
+  encode(message: GetCountryResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.country !== undefined) {
+      Country.encode(message.country, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetCountryResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetCountryResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.country = Country.decode(reader, reader.uint32());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+};
+
+function createBaseGetChurchStateResponse(): GetChurchStateResponse {
+  return {};
+}
+
+export const GetChurchStateResponse: MessageFns<GetChurchStateResponse> = {
+  encode(message: GetChurchStateResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.church_state !== undefined) {
+      ChurchState.encode(message.church_state, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetChurchStateResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetChurchStateResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.church_state = ChurchState.decode(reader, reader.uint32());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+};
+
+function createBaseGetRegionResponse(): GetRegionResponse {
+  return {};
+}
+
+export const GetRegionResponse: MessageFns<GetRegionResponse> = {
+  encode(message: GetRegionResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.region !== undefined) {
+      Region.encode(message.region, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetRegionResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetRegionResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.region = Region.decode(reader, reader.uint32());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+};
+
+function createBaseGetGroupResponse(): GetGroupResponse {
+  return {};
+}
+
+export const GetGroupResponse: MessageFns<GetGroupResponse> = {
+  encode(message: GetGroupResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.group !== undefined) {
+      Group.encode(message.group, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetGroupResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetGroupResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.group = Group.decode(reader, reader.uint32());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+};
+
+function createBaseGetDistrictResponse(): GetDistrictResponse {
+  return {};
+}
+
+export const GetDistrictResponse: MessageFns<GetDistrictResponse> = {
+  encode(message: GetDistrictResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.district !== undefined) {
+      District.encode(message.district, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetDistrictResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetDistrictResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.district = District.decode(reader, reader.uint32());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+};
+
+function createBaseZone(): Zone {
+  return { id: "", name: "", currency: "" };
+}
+
+export const Zone: MessageFns<Zone> = {
+  encode(message: Zone, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+    if (message.currency !== "") {
+      writer.uint32(26).string(message.currency);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): Zone {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseZone();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.name = reader.string();
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.currency = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+};
+
+function createBaseCountry(): Country {
+  return { id: "", name: "", zone_id: "", code: "", flag: "" };
+}
+
+export const Country: MessageFns<Country> = {
+  encode(message: Country, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+    if (message.zone_id !== "") {
+      writer.uint32(26).string(message.zone_id);
+    }
+    if (message.code !== "") {
+      writer.uint32(34).string(message.code);
+    }
+    if (message.flag !== "") {
+      writer.uint32(42).string(message.flag);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): Country {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCountry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.name = reader.string();
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.zone_id = reader.string();
+          continue;
+        }
+        case 4: {
+          if (tag !== 34) {
+            break;
+          }
+
+          message.code = reader.string();
+          continue;
+        }
+        case 5: {
+          if (tag !== 42) {
+            break;
+          }
+
+          message.flag = reader.string();
           continue;
         }
       }
@@ -156,19 +833,337 @@ export const PoliticalState: MessageFns<PoliticalState> = {
   },
 };
 
+function createBaseChurchState(): ChurchState {
+  return { id: "", name: "", country_id: "", state_country_id: 0 };
+}
+
+export const ChurchState: MessageFns<ChurchState> = {
+  encode(message: ChurchState, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+    if (message.country_id !== "") {
+      writer.uint32(26).string(message.country_id);
+    }
+    if (message.state_country_id !== 0) {
+      writer.uint32(32).uint64(message.state_country_id);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ChurchState {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseChurchState();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.name = reader.string();
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.country_id = reader.string();
+          continue;
+        }
+        case 4: {
+          if (tag !== 32) {
+            break;
+          }
+
+          message.state_country_id = longToNumber(reader.uint64());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+};
+
+function createBaseRegion(): Region {
+  return { id: "", name: "", church_state_id: "", region_state_id: 0 };
+}
+
+export const Region: MessageFns<Region> = {
+  encode(message: Region, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+    if (message.church_state_id !== "") {
+      writer.uint32(26).string(message.church_state_id);
+    }
+    if (message.region_state_id !== 0) {
+      writer.uint32(32).uint64(message.region_state_id);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): Region {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRegion();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.name = reader.string();
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.church_state_id = reader.string();
+          continue;
+        }
+        case 4: {
+          if (tag !== 32) {
+            break;
+          }
+
+          message.region_state_id = longToNumber(reader.uint64());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+};
+
+function createBaseGroup(): Group {
+  return { id: "", name: "", region_id: "", group_region_id: 0 };
+}
+
+export const Group: MessageFns<Group> = {
+  encode(message: Group, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+    if (message.region_id !== "") {
+      writer.uint32(26).string(message.region_id);
+    }
+    if (message.group_region_id !== 0) {
+      writer.uint32(32).uint64(message.group_region_id);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): Group {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGroup();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.name = reader.string();
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.region_id = reader.string();
+          continue;
+        }
+        case 4: {
+          if (tag !== 32) {
+            break;
+          }
+
+          message.group_region_id = longToNumber(reader.uint64());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+};
+
+function createBaseDistrict(): District {
+  return { id: "", name: "", group_id: "", district_group_id: 0 };
+}
+
+export const District: MessageFns<District> = {
+  encode(message: District, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+    if (message.group_id !== "") {
+      writer.uint32(26).string(message.group_id);
+    }
+    if (message.district_group_id !== 0) {
+      writer.uint32(32).uint64(message.district_group_id);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): District {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseDistrict();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.name = reader.string();
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.group_id = reader.string();
+          continue;
+        }
+        case 4: {
+          if (tag !== 32) {
+            break;
+          }
+
+          message.district_group_id = longToNumber(reader.uint64());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+};
+
 export interface LocationServiceClient {
   getPoliticalState(request: GetPoliticalStatePayload): Observable<GetPoliticalStateResponse>;
+
+  getZone(request: GetZonePayload): Observable<GetZoneResponse>;
+
+  getCountry(request: GetCountryPayload): Observable<GetCountryResponse>;
+
+  getChurchState(request: GetChurchStatePayload): Observable<GetChurchStateResponse>;
+
+  getRegion(request: GetRegionPayload): Observable<GetRegionResponse>;
+
+  getGroup(request: GetGroupPayload): Observable<GetGroupResponse>;
+
+  getDistrict(request: GetDistrictPayload): Observable<GetDistrictResponse>;
 }
 
 export interface LocationServiceController {
   getPoliticalState(
     request: GetPoliticalStatePayload,
   ): Promise<GetPoliticalStateResponse> | Observable<GetPoliticalStateResponse> | GetPoliticalStateResponse;
+
+  getZone(request: GetZonePayload): Promise<GetZoneResponse> | Observable<GetZoneResponse> | GetZoneResponse;
+
+  getCountry(
+    request: GetCountryPayload,
+  ): Promise<GetCountryResponse> | Observable<GetCountryResponse> | GetCountryResponse;
+
+  getChurchState(
+    request: GetChurchStatePayload,
+  ): Promise<GetChurchStateResponse> | Observable<GetChurchStateResponse> | GetChurchStateResponse;
+
+  getRegion(request: GetRegionPayload): Promise<GetRegionResponse> | Observable<GetRegionResponse> | GetRegionResponse;
+
+  getGroup(request: GetGroupPayload): Promise<GetGroupResponse> | Observable<GetGroupResponse> | GetGroupResponse;
+
+  getDistrict(
+    request: GetDistrictPayload,
+  ): Promise<GetDistrictResponse> | Observable<GetDistrictResponse> | GetDistrictResponse;
 }
 
 export function LocationServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["getPoliticalState"];
+    const grpcMethods: string[] = [
+      "getPoliticalState",
+      "getZone",
+      "getCountry",
+      "getChurchState",
+      "getRegion",
+      "getGroup",
+      "getDistrict",
+    ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("LocationService", method)(constructor.prototype[method], method, descriptor);
@@ -182,6 +1177,17 @@ export function LocationServiceControllerMethods() {
 }
 
 export const LOCATION_SERVICE_NAME = "LocationService";
+
+function longToNumber(int64: { toString(): string }): number {
+  const num = globalThis.Number(int64.toString());
+  if (num > globalThis.Number.MAX_SAFE_INTEGER) {
+    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
+  }
+  if (num < globalThis.Number.MIN_SAFE_INTEGER) {
+    throw new globalThis.Error("Value is smaller than Number.MIN_SAFE_INTEGER");
+  }
+  return num;
+}
 
 interface MessageFns<T> {
   encode(message: T, writer?: BinaryWriter): BinaryWriter;

@@ -6,7 +6,7 @@ import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { join } from 'path';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ApiKeyGuard } from './guards';
+import { ApiKeyGuard } from './guards/api-key.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
