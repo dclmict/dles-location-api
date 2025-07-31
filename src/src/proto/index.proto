@@ -1,21 +1,119 @@
 syntax = "proto3";
-
 package location;
 
 service LocationService {
   rpc GetPoliticalState (GetPoliticalStatePayload) returns (GetPoliticalStateResponse) {};
+  rpc GetZone (GetZonePayload) returns (GetZoneResponse) {};
+  rpc GetCountry (GetCountryPayload) returns (GetCountryResponse) {};
+  rpc GetChurchState (GetChurchStatePayload) returns (GetChurchStateResponse) {};
+  rpc GetRegion (GetRegionPayload) returns (GetRegionResponse) {};
+  rpc GetGroup (GetGroupPayload) returns (GetGroupResponse) {};
+  rpc GetDistrict (GetDistrictPayload) returns (GetDistrictResponse) {};
 }
 
+// Payloads
 message GetPoliticalStatePayload {
   string id = 1;
 }
 
+message GetZonePayload {
+  string id = 1;
+}
+
+message GetCountryPayload {
+  string id = 1;
+}
+
+message GetChurchStatePayload {
+  string id = 1;
+}
+
+message GetRegionPayload {
+  string id = 1;
+}
+
+message GetGroupPayload {
+  string id = 1;
+}
+
+message GetDistrictPayload {
+  string id = 1;
+}
+
+// Responses
 message GetPoliticalStateResponse {
   PoliticalState political_state = 1;
+}
+
+message GetZoneResponse {
+  Zone zone = 1;
+}
+
+message GetCountryResponse {
+  Country country = 1;
+}
+
+message GetChurchStateResponse {
+  ChurchState church_state = 1;
+}
+
+message GetRegionResponse {
+  Region region = 1;
+}
+
+message GetGroupResponse {
+  Group group = 1;
+}
+
+message GetDistrictResponse {
+  District district = 1;
+}
+
+// Entity Messages
+message Zone {
+  string id = 1;
+  string name = 2;
+  string currency = 3;
+}
+
+message Country {
+  string id = 1;
+  string name = 2;
+  string zone_id = 3;
+  string code = 4;
+  string flag = 5;
 }
 
 message PoliticalState {
   string id = 1;
   string name = 2;
   string country_id = 3;
+}
+
+message ChurchState {
+  string id = 1;
+  string name = 2;
+  string country_id = 3;
+  uint64 state_country_id = 4;
+}
+
+message Region {
+  string id = 1;
+  string name = 2;
+  string church_state_id = 3;
+  uint64 region_state_id = 4;
+}
+
+message Group {
+  string id = 1;
+  string name = 2;
+  string region_id = 3;
+  uint64 group_region_id = 4;
+}
+
+message District {
+  string id = 1;
+  string name = 2;
+  string group_id = 3;
+  uint64 district_group_id = 4;
 }

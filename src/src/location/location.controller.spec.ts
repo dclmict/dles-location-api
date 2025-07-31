@@ -25,10 +25,12 @@ import {
   createRegionResponseExample,
   createZoneResponseExample,
   getChurchStateByIdResponseExample,
+  getCountryByIdResponseExample,
   getDistrictByIdResponseExample,
   getGroupByIdResponseExample,
   getPoliticalStateByIdResponseExample,
   getRegionByIdResponseExample,
+  getZoneByIdResponseExample,
 } from './dto';
 import {
   mockCountry,
@@ -54,6 +56,9 @@ describe('LocationController', () => {
           provide: getModelToken(Zone),
           useValue: {
             create: jest.fn().mockResolvedValue(createZoneResponseExample.data),
+            findByPk: jest
+              .fn()
+              .mockResolvedValue(getZoneByIdResponseExample.data),
           },
         },
         {
@@ -62,6 +67,9 @@ describe('LocationController', () => {
             create: jest
               .fn()
               .mockResolvedValue(createCountryResponseExample.data),
+            findByPk: jest
+              .fn()
+              .mockResolvedValue(getCountryByIdResponseExample.data),
           },
         },
         {
@@ -84,6 +92,9 @@ describe('LocationController', () => {
             findOne: jest
               .fn()
               .mockResolvedValue(getChurchStateByIdResponseExample.data),
+            findByPk: jest
+              .fn()
+              .mockResolvedValue(getChurchStateByIdResponseExample.data),
           },
         },
         {
@@ -93,6 +104,9 @@ describe('LocationController', () => {
               .fn()
               .mockResolvedValue(createRegionResponseExample.data),
             findOne: jest
+              .fn()
+              .mockResolvedValue(getRegionByIdResponseExample.data),
+            findByPk: jest
               .fn()
               .mockResolvedValue(getRegionByIdResponseExample.data),
           },
@@ -106,6 +120,9 @@ describe('LocationController', () => {
             findOne: jest
               .fn()
               .mockResolvedValue(getGroupByIdResponseExample.data),
+            findByPk: jest
+              .fn()
+              .mockResolvedValue(getGroupByIdResponseExample.data),
           },
         },
         {
@@ -115,6 +132,9 @@ describe('LocationController', () => {
               .fn()
               .mockResolvedValue(createDistrictResponseExample.data),
             findOne: jest
+              .fn()
+              .mockResolvedValue(getDistrictByIdResponseExample.data),
+            findByPk: jest
               .fn()
               .mockResolvedValue(getDistrictByIdResponseExample.data),
           },
@@ -130,8 +150,10 @@ describe('LocationController', () => {
 
   it('should be defined', () => {
     expect(locationController).toBeDefined();
+    expect(grpcLocationController).toBeDefined();
   });
 
+  // CREATE TESTS
   describe('createZone', () => {
     it('should call LocationController.createZone and return the result', async () => {
       const result = await locationController.createZone(mockZone);
@@ -214,6 +236,27 @@ describe('LocationController', () => {
     });
   });
 
+  // GET TESTS - REST API
+  describe('getZoneById', () => {
+    it('should call LocationController.getZoneById and return the result', async () => {
+      const result = await locationController.getZoneById(
+        getZoneByIdResponseExample.data.id,
+      );
+
+      expect(result).toEqual(getZoneByIdResponseExample);
+    });
+  });
+
+  describe('getCountryById', () => {
+    it('should call LocationController.getCountryById and return the result', async () => {
+      const result = await locationController.getCountryById(
+        getCountryByIdResponseExample.data.id,
+      );
+
+      expect(result).toEqual(getCountryByIdResponseExample);
+    });
+  });
+
   describe('getPoliticalStateById', () => {
     it('should call LocationController.getPoliticalStateById and return the result', async () => {
       const result = await locationController.getPoliticalStateById(
@@ -222,14 +265,131 @@ describe('LocationController', () => {
 
       expect(result).toEqual(getPoliticalStateByIdResponseExample);
     });
+  });
 
-    it('should call GrpcLocationController.getPoliticalStateById and return the result', async () => {
-      const result = await grpcLocationController.getPoliticalState({
-        id: getPoliticalStateByIdResponseExample.data.id,
+  describe('getChurchStateById', () => {
+    it('should call LocationController.getChurchStateById and return the result', async () => {
+      const result = await locationController.getChurchStateById(
+        getChurchStateByIdResponseExample.data.id,
+      );
+
+      expect(result).toEqual(getChurchStateByIdResponseExample);
+    });
+  });
+
+  describe('getRegionById', () => {
+    it('should call LocationController.getRegionById and return the result', async () => {
+      const result = await locationController.getRegionById(
+        getRegionByIdResponseExample.data.id,
+      );
+
+      expect(result).toEqual(getRegionByIdResponseExample);
+    });
+  });
+
+  describe('getGroupById', () => {
+    it('should call LocationController.getGroupById and return the result', async () => {
+      const result = await locationController.getGroupById(
+        getGroupByIdResponseExample.data.id,
+      );
+
+      expect(result).toEqual(getGroupByIdResponseExample);
+    });
+  });
+
+  describe('getDistrictById', () => {
+    it('should call LocationController.getDistrictById and return the result', async () => {
+      const result = await locationController.getDistrictById(
+        getDistrictByIdResponseExample.data.id,
+      );
+
+      expect(result).toEqual(getDistrictByIdResponseExample);
+    });
+  });
+
+  // GRPC TESTS
+  describe('GrpcLocationController', () => {
+    describe('getZone', () => {
+      it('should call GrpcLocationController.getZone and return the result', async () => {
+        const result = await grpcLocationController.getZone({
+          id: getZoneByIdResponseExample.data.id,
+        });
+
+        expect(result).toEqual({
+          zone: getZoneByIdResponseExample.data,
+        });
       });
+    });
 
-      expect(result).toEqual({
-        political_state: getPoliticalStateByIdResponseExample.data,
+    describe('getCountry', () => {
+      it('should call GrpcLocationController.getCountry and return the result', async () => {
+        const result = await grpcLocationController.getCountry({
+          id: getCountryByIdResponseExample.data.id,
+        });
+
+        expect(result).toEqual({
+          country: getCountryByIdResponseExample.data,
+        });
+      });
+    });
+
+    describe('getPoliticalState', () => {
+      it('should call GrpcLocationController.getPoliticalState and return the result', async () => {
+        const result = await grpcLocationController.getPoliticalState({
+          id: getPoliticalStateByIdResponseExample.data.id,
+        });
+
+        expect(result).toEqual({
+          political_state: getPoliticalStateByIdResponseExample.data,
+        });
+      });
+    });
+
+    describe('getChurchState', () => {
+      it('should call GrpcLocationController.getChurchState and return the result', async () => {
+        const result = await grpcLocationController.getChurchState({
+          id: getChurchStateByIdResponseExample.data.id,
+        });
+
+        expect(result).toEqual({
+          church_state: getChurchStateByIdResponseExample.data,
+        });
+      });
+    });
+
+    describe('getRegion', () => {
+      it('should call GrpcLocationController.getRegion and return the result', async () => {
+        const result = await grpcLocationController.getRegion({
+          id: getRegionByIdResponseExample.data.id,
+        });
+
+        expect(result).toEqual({
+          region: getRegionByIdResponseExample.data,
+        });
+      });
+    });
+
+    describe('getGroup', () => {
+      it('should call GrpcLocationController.getGroup and return the result', async () => {
+        const result = await grpcLocationController.getGroup({
+          id: getGroupByIdResponseExample.data.id,
+        });
+
+        expect(result).toEqual({
+          group: getGroupByIdResponseExample.data,
+        });
+      });
+    });
+
+    describe('getDistrict', () => {
+      it('should call GrpcLocationController.getDistrict and return the result', async () => {
+        const result = await grpcLocationController.getDistrict({
+          id: getDistrictByIdResponseExample.data.id,
+        });
+
+        expect(result).toEqual({
+          district: getDistrictByIdResponseExample.data,
+        });
       });
     });
   });
