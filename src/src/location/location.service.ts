@@ -247,6 +247,7 @@ export class LocationService {
     try {
       const zone = await this.zoneModel.findByPk(id, {
         attributes: { exclude: attributesToExclude },
+        plain: true,
       });
 
       return this.utilService.HttpSuccess(
@@ -263,10 +264,16 @@ export class LocationService {
     }
   }
 
-  async getCountryById(id: string) {
+  async getCountryById(id: string, detailed?: boolean) {
     try {
       const country = await this.countryModel.findByPk(id, {
         attributes: { exclude: attributesToExclude },
+        ...(detailed && {
+          include: [
+            { model: Zone, attributes: { exclude: attributesToExclude } },
+          ],
+          plain: true,
+        }),
       });
 
       return this.utilService.HttpSuccess(
@@ -283,10 +290,22 @@ export class LocationService {
     }
   }
 
-  async getPoliticalStateById(id: string) {
+  async getPoliticalStateById(id: string, detailed?: boolean) {
     try {
       const politicalState = await this.politicalStateModel.findByPk(id, {
         attributes: { exclude: attributesToExclude },
+        ...(detailed && {
+          include: [
+            {
+              model: Country,
+              attributes: { exclude: attributesToExclude },
+              include: [
+                { model: Zone, attributes: { exclude: attributesToExclude } },
+              ],
+            },
+          ],
+          plain: true,
+        }),
       });
 
       return this.utilService.HttpSuccess(
@@ -303,10 +322,22 @@ export class LocationService {
     }
   }
 
-  async getChurchStateById(id: string) {
+  async getChurchStateById(id: string, detailed?: boolean) {
     try {
       const churchState = await this.churchStateModel.findByPk(id, {
         attributes: { exclude: attributesToExclude },
+        ...(detailed && {
+          include: [
+            {
+              model: Country,
+              attributes: { exclude: attributesToExclude },
+              include: [
+                { model: Zone, attributes: { exclude: attributesToExclude } },
+              ],
+            },
+          ],
+          plain: true,
+        }),
       });
 
       return this.utilService.HttpSuccess(
@@ -323,10 +354,31 @@ export class LocationService {
     }
   }
 
-  async getRegionById(id: string) {
+  async getRegionById(id: string, detailed?: boolean) {
     try {
       const region = await this.regionModel.findByPk(id, {
         attributes: { exclude: attributesToExclude },
+        ...(detailed && {
+          include: [
+            {
+              model: ChurchState,
+              attributes: { exclude: attributesToExclude },
+              include: [
+                {
+                  model: Country,
+                  attributes: { exclude: attributesToExclude },
+                  include: [
+                    {
+                      model: Zone,
+                      attributes: { exclude: attributesToExclude },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+          plain: true,
+        }),
       });
 
       return this.utilService.HttpSuccess(
@@ -343,10 +395,37 @@ export class LocationService {
     }
   }
 
-  async getGroupById(id: string) {
+  async getGroupById(id: string, detailed?: boolean) {
     try {
       const group = await this.groupModel.findByPk(id, {
         attributes: { exclude: attributesToExclude },
+        ...(detailed && {
+          include: [
+            {
+              model: Region,
+              attributes: { exclude: attributesToExclude },
+              include: [
+                {
+                  model: ChurchState,
+                  attributes: { exclude: attributesToExclude },
+                  include: [
+                    {
+                      model: Country,
+                      attributes: { exclude: attributesToExclude },
+                      include: [
+                        {
+                          model: Zone,
+                          attributes: { exclude: attributesToExclude },
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+          plain: true,
+        }),
       });
 
       return this.utilService.HttpSuccess(
@@ -363,10 +442,43 @@ export class LocationService {
     }
   }
 
-  async getDistrictById(id: string) {
+  async getDistrictById(id: string, detailed?: boolean) {
     try {
       const district = await this.districtModel.findByPk(id, {
         attributes: { exclude: attributesToExclude },
+        ...(detailed && {
+          include: [
+            {
+              model: Group,
+              attributes: { exclude: attributesToExclude },
+              include: [
+                {
+                  model: Region,
+                  attributes: { exclude: attributesToExclude },
+                  include: [
+                    {
+                      model: ChurchState,
+                      attributes: { exclude: attributesToExclude },
+                      include: [
+                        {
+                          model: Country,
+                          attributes: { exclude: attributesToExclude },
+                          include: [
+                            {
+                              model: Zone,
+                              attributes: { exclude: attributesToExclude },
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+          plain: true,
+        }),
       });
 
       return this.utilService.HttpSuccess(

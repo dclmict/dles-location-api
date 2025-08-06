@@ -9,6 +9,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ApiKeyGuard } from './guards/api-key.guard';
+import { MetadataModule } from './metadata/metadata.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { ApiKeyGuard } from './guards/api-key.guard';
       logging: console.log,
     }),
     LocationModule,
+    MetadataModule,
   ],
   controllers: [AppController],
   providers: [
