@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { PaginationMetadataDto } from './dto';
 
 @Injectable()
 export class UtilsService {
@@ -8,5 +9,23 @@ export class UtilsService {
       message,
       data,
     };
+  }
+
+  queryPaginator(paginationMetaDataDto: PaginationMetadataDto) {
+    const page = paginationMetaDataDto?.page || 1;
+    const rowsPerPage = paginationMetaDataDto?.rows_per_page || 100;
+
+    return {
+      offset: (page - 1) * rowsPerPage,
+      limit: rowsPerPage,
+    };
+  }
+
+  shapePaginatedResponse<T>(
+    paginated_data: T,
+    paginationMetaData: PaginationMetadataDto,
+    count: number,
+  ) {
+    return { paginated_data, metadata: { ...paginationMetaData, count } };
   }
 }
