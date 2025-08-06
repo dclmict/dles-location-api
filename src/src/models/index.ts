@@ -5,3 +5,6 @@ export * from './church-state.model';
 export * from './region.model';
 export * from './group.model';
 export * from './district.model';
+export * from './location-address.model';
+export * from './location-boundary.model';
+export * from './metadata.model';

@@ -19,7 +19,7 @@ export class Country extends Model {
   @Column({
     type: DataType.STRING,
     allowNull: false,
-    defaultValue: uuid(),
+    defaultValue: uuid,
   })
   declare id: string;
 
