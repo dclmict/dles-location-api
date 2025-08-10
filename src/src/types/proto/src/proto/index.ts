@@ -47,6 +47,13 @@ export interface GetZoneResponse {
   zone?: Zone | undefined;
 }
 
+export interface GetAllZonesPayload {
+}
+
+export interface GetAllZonesResponse {
+  zones: Zone[];
+}
+
 export interface GetCountryResponse {
   country?: Country | undefined;
 }
@@ -437,6 +444,69 @@ export const GetZoneResponse: MessageFns<GetZoneResponse> = {
           }
 
           message.zone = Zone.decode(reader, reader.uint32());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+};
+
+function createBaseGetAllZonesPayload(): GetAllZonesPayload {
+  return {};
+}
+
+export const GetAllZonesPayload: MessageFns<GetAllZonesPayload> = {
+  encode(_: GetAllZonesPayload, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetAllZonesPayload {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetAllZonesPayload();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+};
+
+function createBaseGetAllZonesResponse(): GetAllZonesResponse {
+  return { zones: [] };
+}
+
+export const GetAllZonesResponse: MessageFns<GetAllZonesResponse> = {
+  encode(message: GetAllZonesResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    for (const v of message.zones) {
+      Zone.encode(v!, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetAllZonesResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetAllZonesResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.zones.push(Zone.decode(reader, reader.uint32()));
           continue;
         }
       }
@@ -1114,11 +1184,13 @@ export const District: MessageFns<District> = {
 };
 
 export interface LocationServiceClient {
-  getPoliticalState(request: GetPoliticalStatePayload): Observable<GetPoliticalStateResponse>;
-
   getZone(request: GetZonePayload): Observable<GetZoneResponse>;
 
+  getAllZones(request: GetAllZonesPayload): Observable<GetAllZonesResponse>;
+
   getCountry(request: GetCountryPayload): Observable<GetCountryResponse>;
+
+  getPoliticalState(request: GetPoliticalStatePayload): Observable<GetPoliticalStateResponse>;
 
   getChurchState(request: GetChurchStatePayload): Observable<GetChurchStateResponse>;
 
@@ -1130,15 +1202,19 @@ export interface LocationServiceClient {
 }
 
 export interface LocationServiceController {
-  getPoliticalState(
-    request: GetPoliticalStatePayload,
-  ): Promise<GetPoliticalStateResponse> | Observable<GetPoliticalStateResponse> | GetPoliticalStateResponse;
-
   getZone(request: GetZonePayload): Promise<GetZoneResponse> | Observable<GetZoneResponse> | GetZoneResponse;
+
+  getAllZones(
+    request: GetAllZonesPayload,
+  ): Promise<GetAllZonesResponse> | Observable<GetAllZonesResponse> | GetAllZonesResponse;
 
   getCountry(
     request: GetCountryPayload,
   ): Promise<GetCountryResponse> | Observable<GetCountryResponse> | GetCountryResponse;
+
+  getPoliticalState(
+    request: GetPoliticalStatePayload,
+  ): Promise<GetPoliticalStateResponse> | Observable<GetPoliticalStateResponse> | GetPoliticalStateResponse;
 
   getChurchState(
     request: GetChurchStatePayload,
@@ -1156,9 +1232,10 @@ export interface LocationServiceController {
 export function LocationServiceControllerMethods() {
   return function (constructor: Function) {
     const grpcMethods: string[] = [
-      "getPoliticalState",
       "getZone",
+      "getAllZones",
       "getCountry",
+      "getPoliticalState",
       "getChurchState",
       "getRegion",
       "getGroup",
