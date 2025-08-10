@@ -31,6 +31,18 @@ export const createPoliticalStateResponseExample = {
   },
 };
 
+export const getPoliticalStatesByCountryIdResponseExample = {
+  statusCode: 200,
+  message: 'Data retrieved successfully',
+  data: [
+    {
+      id: '1f067fb9-fa83-6aa0-9442-58863966f38f',
+      name: 'Iowa',
+      country_id: '127',
+    },
+  ],
+};
+
 export const getPoliticalStateByIdResponseExample = {
   statusCode: 200,
   message: 'Data retrieved successfully',

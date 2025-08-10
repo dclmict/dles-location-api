@@ -47,6 +47,20 @@ export const createCountryResponseExample = {
   },
 };
 
+export const getAllCountriesResponseExample = {
+  statusCode: 200,
+  message: 'Data retrieved successfully',
+  data: [
+    {
+      id: '1f067fc3-e76a-6db0-b382-0e57d882b3b7',
+      name: 'Solomon Islands',
+      code: '+233',
+      flag: 'https://difficult-monocle.biz',
+      zone_id: '10',
+    },
+  ],
+};
+
 export const getCountryByIdResponseExample = {
   statusCode: 200,
   message: 'Data retrieved successfully',

@@ -32,6 +32,19 @@ export const createChurchStateResponseExample = {
   },
 };
 
+export const getChurchStatesByCountryIdResponseExample = {
+  statusCode: 200,
+  message: 'Data retrieved successfully',
+  data: [
+    {
+      id: '1f067fb4-981f-6030-ba28-d4c9d93cd8d7',
+      name: 'North Carolina',
+      country_id: '127',
+      state_country_id: 56,
+    },
+  ],
+};
+
 export const getChurchStateByIdResponseExample = {
   statusCode: 200,
   message: 'Data retrieved successfully',

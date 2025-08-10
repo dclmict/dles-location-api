@@ -39,3 +39,15 @@ export const getZoneByIdResponseExample = {
     currency: 'RSD',
   },
 };
+
+export const getAllZonesResponseExample = {
+  statusCode: 200,
+  message: 'Data retrieved successfully',
+  data: [
+    {
+      id: '1f067fd3-1e0f-6aa0-988b-b81efa5b6cc3',
+      name: 'Europe',
+      currency: 'RSD',
+    },
+  ],
+};
