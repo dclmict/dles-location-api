@@ -2,9 +2,10 @@ syntax = "proto3";
 package location;
 
 service LocationService {
-  rpc GetPoliticalState (GetPoliticalStatePayload) returns (GetPoliticalStateResponse) {};
   rpc GetZone (GetZonePayload) returns (GetZoneResponse) {};
+  rpc GetAllZones (GetAllZonesPayload) returns (GetAllZonesResponse) {};
   rpc GetCountry (GetCountryPayload) returns (GetCountryResponse) {};
+  rpc GetPoliticalState (GetPoliticalStatePayload) returns (GetPoliticalStateResponse) {};
   rpc GetChurchState (GetChurchStatePayload) returns (GetChurchStateResponse) {};
   rpc GetRegion (GetRegionPayload) returns (GetRegionResponse) {};
   rpc GetGroup (GetGroupPayload) returns (GetGroupResponse) {};
@@ -47,6 +48,12 @@ message GetPoliticalStateResponse {
 
 message GetZoneResponse {
   Zone zone = 1;
+}
+
+message GetAllZonesPayload {}
+
+message GetAllZonesResponse {
+  repeated Zone zones = 1;
 }
 
 message GetCountryResponse {

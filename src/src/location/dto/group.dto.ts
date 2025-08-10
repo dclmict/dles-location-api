@@ -30,6 +30,19 @@ export const createGroupResponseExample = {
   },
 };
 
+export const getGroupsByRegionIdResponseExample = {
+  statusCode: 200,
+  message: 'Data retrieved successfully',
+  data: [
+    {
+      id: '1f067fe9-3a71-6480-a343-c8c0a662b25b',
+      name: 'Waynechester',
+      region_id: '12',
+      group_region_id: 9,
+    },
+  ],
+};
+
 export const getGroupByIdResponseExample = {
   statusCode: 200,
   message: 'Data retrieved successfully',

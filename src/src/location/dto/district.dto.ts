@@ -30,6 +30,19 @@ export const createDistrictResponseExample = {
   },
 };
 
+export const getDistrictsByGroupIdResponseExample = {
+  statusCode: 200,
+  message: 'Data retrieved successfully',
+  data: [
+    {
+      id: '1f067ffa-14a2-6e00-9ea3-d505ca72eec0',
+      name: 'Itzel Unions',
+      group_id: '1',
+      district_group_id: 7,
+    },
+  ],
+};
+
 export const getDistrictByIdResponseExample = {
   statusCode: 200,
   message: 'Data retrieved successfully',
