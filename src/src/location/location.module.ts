@@ -15,6 +15,7 @@ import {
   Region,
   Group,
   District,
+  LGA,
 } from 'src/models';
 
 @Module({
@@ -27,6 +28,7 @@ import {
       Region,
       Group,
       District,
+      LGA,
     ]),
   ],
   controllers: [LocationController, GrpcLocationController],

@@ -10,6 +10,7 @@ import {
   Region,
   Group,
   District,
+  LGA,
 } from 'src/models';
 import { UtilsService } from 'src/utils/utils.service';
 import {
@@ -17,6 +18,7 @@ import {
   CreateCountryDto,
   CreateDistrictDto,
   CreateGroupDto,
+  CreateLGADto,
   CreatePoliticalStateDto,
   CreateRegionDto,
   CreateZoneDto,
@@ -34,6 +36,9 @@ export class LocationService {
 
     @InjectModel(PoliticalState)
     private readonly politicalStateModel: typeof PoliticalState,
+
+    @InjectModel(LGA)
+    private readonly lgaModel: typeof LGA,
 
     @InjectModel(ChurchState)
     private readonly churchStateModel: typeof ChurchState,
@@ -98,6 +103,25 @@ export class LocationService {
       /* istanbul ignore next */
       throw new HttpException(
         err?.message || 'Failed to create political state',
+        err?.status || HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async createLGA(createLGADto: CreateLGADto) {
+    try {
+      const data = await this.lgaModel.create({
+        ...createLGADto,
+      });
+      return this.utilService.HttpSuccess(
+        HttpStatus.CREATED,
+        'LGA created successfully',
+        data,
+      );
+    } catch (err) {
+      /* istanbul ignore next */
+      throw new HttpException(
+        err?.message || 'Failed to create lga state',
         err?.status || HttpStatus.BAD_REQUEST,
       );
     }
@@ -511,6 +535,47 @@ export class LocationService {
         HttpStatus.OK,
         'Data retrieved successfully',
         region,
+      );
+    } catch (err) {
+      /* istanbul ignore next */
+      throw new HttpException(
+        err?.message || 'An error occurred',
+        err?.status || HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async getLGAById(id: string) {
+    try {
+      const lga = await this.lgaModel.findByPk(id, {
+        attributes: { exclude: attributesToExclude },
+      });
+
+      return this.utilService.HttpSuccess(
+        HttpStatus.OK,
+        'Data retrieved successfully',
+        lga,
+      );
+    } catch (err) {
+      /* istanbul ignore next */
+      throw new HttpException(
+        err?.message || 'An error occurred',
+        err?.status || HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async getLGAsByStateId(state_id: string) {
+    try {
+      const lgas = await this.lgaModel.findAll({
+        where: { state_id },
+        attributes: { exclude: attributesToExclude },
+      });
+
+      return this.utilService.HttpSuccess(
+        HttpStatus.OK,
+        'Data retrieved successfully',
+        lgas,
       );
     } catch (err) {
       /* istanbul ignore next */
