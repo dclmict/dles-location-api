@@ -8,3 +8,4 @@ export * from './district.model';
 export * from './location-address.model';
 export * from './location-boundary.model';
 export * from './metadata.model';
+export * from './lga.model';

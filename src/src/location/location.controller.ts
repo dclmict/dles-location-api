@@ -49,6 +49,12 @@ import {
   GetZonePayload,
   GetZoneResponse,
 } from 'src/types/proto/index.location';
+import {
+  CreateLGADto,
+  createLGAResponseExample,
+  getLGAByIdResponseExample,
+  getLGAsByStateIdResponseExample,
+} from './dto/lga.dto';
 
 @Controller('location')
 export class LocationController {
@@ -138,6 +144,18 @@ export class LocationController {
   })
   createDistrict(@Body() createDistrictDto: CreateDistrictDto) {
     return this.locationService.createDistrict(createDistrictDto);
+  }
+
+  @Post('/lga')
+  @ApiOperation({ summary: 'Create an LGA' })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'LGA created successfully',
+    type: CreateLGADto,
+    example: createLGAResponseExample,
+  })
+  createLGA(@Body() createLGADto: CreateLGADto) {
+    return this.locationService.createLGA(createLGADto);
   }
 
   @Get('/zone')
@@ -303,6 +321,28 @@ export class LocationController {
   })
   getDistrictById(@Param('id') id: string) {
     return this.locationService.getDistrictById(id);
+  }
+
+  @Get('/lga/state/:id')
+  @ApiOperation({ summary: 'Get all lgas by state id' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Data retrieved successfully',
+    example: getLGAsByStateIdResponseExample,
+  })
+  getLGAsByStateId(@Param('id') id: string) {
+    return this.locationService.getLGAsByStateId(id);
+  }
+
+  @Get('/lga/:id')
+  @ApiOperation({ summary: 'Get an lga by id' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Data retrieved successfully',
+    example: getLGAByIdResponseExample,
+  })
+  getLGAById(@Param('id') id: string) {
+    return this.locationService.getLGAById(id);
   }
 }
 
