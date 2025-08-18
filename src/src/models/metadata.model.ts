@@ -6,11 +6,14 @@ import {
   PrimaryKey,
   DataType,
   HasOne,
+  ForeignKey,
+  BelongsTo,
 } from 'sequelize-typescript';
 import { LOCATION_STATUS, LOCATION_TYPE } from 'src/consts';
 import { v6 as uuid } from 'uuid';
 import { LocationBoundary } from './location-boundary.model';
 import { LocationAddress } from './location-address.model';
+import { ChurchLanguage } from './church-language.model';
 
 @Table({
   timestamps: true,
@@ -71,9 +74,16 @@ export class Metadata extends Model {
   })
   admin: string;
 
+  @ForeignKey(() => ChurchLanguage)
+  @Column({ allowNull: true })
+  language_id: string;
+
   @HasOne(() => LocationAddress)
   address: LocationAddress;
 
   @HasOne(() => LocationBoundary)
   boundary: LocationBoundary;
+
+  @BelongsTo(() => ChurchLanguage)
+  language: ChurchLanguage;
 }

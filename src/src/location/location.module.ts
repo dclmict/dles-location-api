@@ -17,6 +17,7 @@ import {
   District,
   LGA,
   Language,
+  ChurchLanguage,
 } from 'src/models';
 
 @Module({
@@ -31,6 +32,7 @@ import {
       District,
       LGA,
       Language,
+      ChurchLanguage,
     ]),
   ],
   controllers: [LocationController, GrpcLocationController],

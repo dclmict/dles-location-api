@@ -18,9 +18,11 @@ import {
   createRegionResponseExample,
   CreateZoneDto,
   createZoneResponseExample,
+  getAllChurchLanguagesResponseExample,
   getAllCountriesResponseExample,
   getAllLanguagesResponseExample,
   getAllZonesResponseExample,
+  getChurchLanguageByIdResponseExample,
   getChurchStateByIdResponseExample,
   getChurchStatesByCountryIdResponseExample,
   getCountryByIdResponseExample,
@@ -37,7 +39,8 @@ import {
 } from './dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import {
-  GetAllZonesResponse,
+  GetChurchLanguagePayload,
+  GetChurchLanguageResponse,
   GetChurchStatePayload,
   GetChurchStateResponse,
   GetCountryPayload,
@@ -46,6 +49,8 @@ import {
   GetDistrictResponse,
   GetGroupPayload,
   GetGroupResponse,
+  GetLanguagePayload,
+  GetLanguageResponse,
   GetPoliticalStatePayload,
   GetPoliticalStateResponse,
   GetRegionPayload,
@@ -196,6 +201,17 @@ export class LocationController {
     return this.locationService.getAllLanguages();
   }
 
+  @Get('/church-language')
+  @ApiOperation({ summary: 'Get all church languages' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Data retrieved successfully',
+    example: getAllChurchLanguagesResponseExample,
+  })
+  getAllChurchLanguages() {
+    return this.locationService.getAllChurchLanguages();
+  }
+
   @Get('/zone/:id')
   @ApiOperation({ summary: 'Get a zone by id' })
   @ApiResponse({
@@ -216,6 +232,17 @@ export class LocationController {
   })
   getLanguageById(@Param('id') id: string) {
     return this.locationService.getLanguageById(id);
+  }
+
+  @Get('/church-language/:id')
+  @ApiOperation({ summary: 'Get a church language by id' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Data retrieved successfully',
+    example: getChurchLanguageByIdResponseExample,
+  })
+  getChurchLanguageById(@Param('id') id: string) {
+    return this.locationService.getChurchLanguageById(id);
   }
 
   @Get('/country')
@@ -389,15 +416,23 @@ export class GrpcLocationController {
   constructor(private readonly locationService: LocationService) {}
 
   @GrpcMethod('LocationService')
-  async getAllZones(): Promise<GetAllZonesResponse> {
-    const { data } = await this.locationService.getAllZones();
-    return { zones: data };
-  }
-
-  @GrpcMethod('LocationService')
   async getZone({ id }: GetZonePayload): Promise<GetZoneResponse> {
     const { data } = await this.locationService.getZoneById(id);
     return { zone: data! };
+  }
+
+  @GrpcMethod('LocationService')
+  async getLanguage({ id }: GetLanguagePayload): Promise<GetLanguageResponse> {
+    const { data } = await this.locationService.getLanguageById(id);
+    return { language: data! };
+  }
+
+  @GrpcMethod('LocationService')
+  async getChurchLanguage({
+    id,
+  }: GetChurchLanguagePayload): Promise<GetChurchLanguageResponse> {
+    const { data } = await this.locationService.getChurchLanguageById(id);
+    return { church_language: data! };
   }
 
   @GrpcMethod('LocationService')

@@ -10,14 +10,14 @@ async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule);
   const locationService = app.get(LocationService);
 
-  const jsonPath = path.join(__dirname, '../data/languages.json');
+  const jsonPath = path.join(__dirname, '../data/church_languages.json');
   const dataArray = JSON.parse(fs.readFileSync(jsonPath, 'utf8')) as Array<{
     languageId: string;
     languageName: string;
   }>;
 
   for (const data of dataArray) {
-    await locationService.createLanguage({
+    await locationService.createChurchLanguage({
       // id: data?.languageId,
       name: data?.languageName,
     });
