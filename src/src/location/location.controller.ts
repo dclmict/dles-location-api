@@ -10,6 +10,8 @@ import {
   createDistrictResponseExample,
   CreateGroupDto,
   createGroupResponseExample,
+  CreateLanguageDto,
+  createLanguageResponseExample,
   CreatePoliticalStateDto,
   createPoliticalStateResponseExample,
   CreateRegionDto,
@@ -17,6 +19,7 @@ import {
   CreateZoneDto,
   createZoneResponseExample,
   getAllCountriesResponseExample,
+  getAllLanguagesResponseExample,
   getAllZonesResponseExample,
   getChurchStateByIdResponseExample,
   getChurchStatesByCountryIdResponseExample,
@@ -25,6 +28,7 @@ import {
   getDistrictsByGroupIdResponseExample,
   getGroupByIdResponseExample,
   getGroupsByRegionIdResponseExample,
+  getLanguageByIdResponseExample,
   getPoliticalStateByIdResponseExample,
   getPoliticalStatesByCountryIdResponseExample,
   getRegionByIdResponseExample,
@@ -70,6 +74,18 @@ export class LocationController {
   })
   createZone(@Body() createZoneDto: CreateZoneDto) {
     return this.locationService.createZone(createZoneDto);
+  }
+
+  @Post('/language')
+  @ApiOperation({ summary: 'Create a language' })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Language created successfully',
+    type: CreateLanguageDto,
+    example: createLanguageResponseExample,
+  })
+  createLanguage(@Body() createLanguageDto: CreateLanguageDto) {
+    return this.locationService.createLanguage(createLanguageDto);
   }
 
   @Post('/country')
@@ -169,6 +185,17 @@ export class LocationController {
     return this.locationService.getAllZones();
   }
 
+  @Get('/language')
+  @ApiOperation({ summary: 'Get all languages' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Data retrieved successfully',
+    example: getAllLanguagesResponseExample,
+  })
+  getAllLanguages() {
+    return this.locationService.getAllLanguages();
+  }
+
   @Get('/zone/:id')
   @ApiOperation({ summary: 'Get a zone by id' })
   @ApiResponse({
@@ -178,6 +205,17 @@ export class LocationController {
   })
   getZoneById(@Param('id') id: string) {
     return this.locationService.getZoneById(id);
+  }
+
+  @Get('/language/:id')
+  @ApiOperation({ summary: 'Get a language by id' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Data retrieved successfully',
+    example: getLanguageByIdResponseExample,
+  })
+  getLanguageById(@Param('id') id: string) {
+    return this.locationService.getLanguageById(id);
   }
 
   @Get('/country')

@@ -6,3 +6,4 @@ export * from './region.dto';
 export * from './group.dto';
 export * from './district.dto';
 export * from './lga.dto';
+export * from './language.dto';
