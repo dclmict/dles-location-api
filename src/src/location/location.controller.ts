@@ -1,4 +1,12 @@
-import { Body, Controller, Get, HttpStatus, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { LocationService } from './location.service';
 import { GrpcMethod } from '@nestjs/microservices';
 import {
@@ -64,6 +72,7 @@ import {
   getLGAByIdResponseExample,
   getLGAsByStateIdResponseExample,
 } from './dto/lga.dto';
+import { GrpcApiKeyGuard } from 'src/guards/api-key.guard';
 
 @Controller('location')
 export class LocationController {
@@ -412,19 +421,20 @@ export class LocationController {
 }
 
 @Controller()
+@UseGuards(GrpcApiKeyGuard)
 export class GrpcLocationController {
   constructor(private readonly locationService: LocationService) {}
 
   @GrpcMethod('LocationService')
   async getZone({ id }: GetZonePayload): Promise<GetZoneResponse> {
     const { data } = await this.locationService.getZoneById(id);
-    return { zone: data! };
+    return { zone: data!.toJSON() };
   }
 
   @GrpcMethod('LocationService')
   async getLanguage({ id }: GetLanguagePayload): Promise<GetLanguageResponse> {
     const { data } = await this.locationService.getLanguageById(id);
-    return { language: data! };
+    return { language: data!.toJSON() };
   }
 
   @GrpcMethod('LocationService')
@@ -432,13 +442,13 @@ export class GrpcLocationController {
     id,
   }: GetChurchLanguagePayload): Promise<GetChurchLanguageResponse> {
     const { data } = await this.locationService.getChurchLanguageById(id);
-    return { church_language: data! };
+    return { church_language: data!.toJSON() };
   }
 
   @GrpcMethod('LocationService')
   async getCountry({ id }: GetCountryPayload): Promise<GetCountryResponse> {
     const { data } = await this.locationService.getCountryById(id);
-    return { country: data! };
+    return { country: data!.toJSON() };
   }
 
   @GrpcMethod('LocationService')
@@ -446,7 +456,7 @@ export class GrpcLocationController {
     id,
   }: GetPoliticalStatePayload): Promise<GetPoliticalStateResponse> {
     const { data } = await this.locationService.getPoliticalStateById(id);
-    return { political_state: data! };
+    return { political_state: data!.toJSON() };
   }
 
   @GrpcMethod('LocationService')
@@ -454,24 +464,24 @@ export class GrpcLocationController {
     id,
   }: GetChurchStatePayload): Promise<GetChurchStateResponse> {
     const { data } = await this.locationService.getChurchStateById(id);
-    return { church_state: data! };
+    return { church_state: data!.toJSON() };
   }
 
   @GrpcMethod('LocationService')
   async getRegion({ id }: GetRegionPayload): Promise<GetRegionResponse> {
     const { data } = await this.locationService.getRegionById(id);
-    return { region: data! };
+    return { region: data!.toJSON() };
   }
 
   @GrpcMethod('LocationService')
   async getGroup({ id }: GetGroupPayload): Promise<GetGroupResponse> {
     const { data } = await this.locationService.getGroupById(id);
-    return { group: data! };
+    return { group: data!.toJSON() };
   }
 
   @GrpcMethod('LocationService')
   async getDistrict({ id }: GetDistrictPayload): Promise<GetDistrictResponse> {
     const { data } = await this.locationService.getDistrictById(id);
-    return { district: data! };
+    return { district: data!.toJSON() };
   }
 }
