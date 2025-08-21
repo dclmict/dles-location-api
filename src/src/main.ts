@@ -53,6 +53,9 @@ async function bootstrap() {
       package: 'location',
       protoPath: join(__dirname, 'proto/index.proto'),
       url: 'localhost:5000',
+      loader: {
+        keepCase: true,
+      },
     },
   });
 

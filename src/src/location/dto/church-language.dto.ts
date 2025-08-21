@@ -1,0 +1,43 @@
+import { faker } from '@faker-js/faker';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsString } from 'class-validator';
+
+export class CreateChurchLanguageDto {
+  @ApiProperty({
+    example: faker.location.language().name,
+  })
+  @IsNotEmpty()
+  @IsString()
+  name: string;
+}
+
+export const createChurchLanguageResponseExample = {
+  statusCode: 201,
+  message: 'Church language created successfully',
+  data: {
+    id: '1f067fd3-1e0f-6aa0-988b-b81efa5b6cc3',
+    name: 'English',
+    updatedAt: '2025-07-23T19:45:15.178Z',
+    createdAt: '2025-07-23T19:45:15.178Z',
+  },
+};
+
+export const getChurchLanguageByIdResponseExample = {
+  statusCode: 200,
+  message: 'Data retrieved successfully',
+  data: {
+    id: '1f067fd3-1e0f-6aa0-988b-b81efa5b6cc3',
+    name: 'English',
+  },
+};
+
+export const getAllChurchLanguagesResponseExample = {
+  statusCode: 200,
+  message: 'Data retrieved successfully',
+  data: [
+    {
+      id: '1f067fd3-1e0f-6aa0-988b-b81efa5b6cc3',
+      name: 'English',
+    },
+  ],
+};

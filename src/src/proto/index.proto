@@ -3,7 +3,8 @@ package location;
 
 service LocationService {
   rpc GetZone (GetZonePayload) returns (GetZoneResponse) {};
-  rpc GetAllZones (GetAllZonesPayload) returns (GetAllZonesResponse) {};
+  rpc GetLanguage (GetLanguagePayload) returns (GetLanguageResponse) {};
+  rpc GetChurchLanguage (GetLanguagePayload) returns (GetChurchLanguageResponse) {};
   rpc GetCountry (GetCountryPayload) returns (GetCountryResponse) {};
   rpc GetPoliticalState (GetPoliticalStatePayload) returns (GetPoliticalStateResponse) {};
   rpc GetChurchState (GetChurchStatePayload) returns (GetChurchStateResponse) {};
@@ -13,15 +14,23 @@ service LocationService {
 }
 
 // Payloads
-message GetPoliticalStatePayload {
-  string id = 1;
-}
-
 message GetZonePayload {
   string id = 1;
 }
 
+message GetLanguagePayload {
+  string id = 1;
+}
+
+message GetChurchLanguagePayload {
+  string id = 1;
+}
+
 message GetCountryPayload {
+  string id = 1;
+}
+
+message GetPoliticalStatePayload {
   string id = 1;
 }
 
@@ -42,22 +51,24 @@ message GetDistrictPayload {
 }
 
 // Responses
-message GetPoliticalStateResponse {
-  PoliticalState political_state = 1;
-}
-
 message GetZoneResponse {
   Zone zone = 1;
 }
 
-message GetAllZonesPayload {}
+message GetLanguageResponse {
+  Language language = 1;
+}
 
-message GetAllZonesResponse {
-  repeated Zone zones = 1;
+message GetChurchLanguageResponse {
+  ChurchLanguage church_language = 1;
 }
 
 message GetCountryResponse {
   Country country = 1;
+}
+
+message GetPoliticalStateResponse {
+  PoliticalState political_state = 1;
 }
 
 message GetChurchStateResponse {
@@ -81,6 +92,16 @@ message Zone {
   string id = 1;
   string name = 2;
   string currency = 3;
+}
+
+message Language {
+  string id = 1;
+  string name = 2;
+}
+
+message ChurchLanguage {
+  string id = 1;
+  string name = 2;
 }
 
 message Country {
