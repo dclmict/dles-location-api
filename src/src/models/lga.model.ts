@@ -6,9 +6,10 @@ import {
   DataType,
   BelongsTo,
   ForeignKey,
+  HasMany,
 } from 'sequelize-typescript';
 import { v6 as uuid } from 'uuid';
-import { PoliticalState } from '.';
+import { Metadata, PoliticalState } from '.';
 
 @Table({
   timestamps: true,
@@ -32,4 +33,7 @@ export class LGA extends Model {
 
   @BelongsTo(() => PoliticalState)
   state: PoliticalState;
+
+  @HasMany(() => Metadata)
+  metadata: Metadata[];
 }

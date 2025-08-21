@@ -92,6 +92,16 @@ export class CreateMetadataDto {
   @IsString()
   admin?: string;
 
+  @ApiPropertyOptional({ example: uuid() })
+  @IsOptional()
+  @IsString()
+  language_id?: string;
+
+  @ApiPropertyOptional({ example: uuid() })
+  @IsOptional()
+  @IsString()
+  lga_id?: string;
+
   @ApiPropertyOptional({ type: CreateLocationAddressDto })
   @IsOptional()
   @ValidateNested()
