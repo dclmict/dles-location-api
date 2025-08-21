@@ -3,10 +3,12 @@ import { MetadataService } from './metadata.service';
 import { MetadataController } from './metadata.controller';
 import { UtilsService } from 'src/utils/utils.service';
 import {
+  ChurchLanguage,
   ChurchState,
   Country,
   District,
   Group,
+  Language,
   LGA,
   LocationAddress,
   LocationBoundary,
@@ -32,6 +34,8 @@ import { LocationService } from 'src/location/location.service';
       Group,
       District,
       LGA,
+      Language,
+      ChurchLanguage,
     ]),
   ],
   controllers: [MetadataController],

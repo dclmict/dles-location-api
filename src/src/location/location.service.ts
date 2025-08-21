@@ -11,13 +11,17 @@ import {
   Group,
   District,
   LGA,
+  Language,
+  ChurchLanguage,
 } from 'src/models';
 import { UtilsService } from 'src/utils/utils.service';
 import {
+  CreateChurchLanguageDto,
   CreateChurchStateDto,
   CreateCountryDto,
   CreateDistrictDto,
   CreateGroupDto,
+  CreateLanguageDto,
   CreateLGADto,
   CreatePoliticalStateDto,
   CreateRegionDto,
@@ -52,6 +56,12 @@ export class LocationService {
     @InjectModel(District)
     private readonly districtModel: typeof District,
 
+    @InjectModel(Language)
+    private readonly languageModel: typeof Language,
+
+    @InjectModel(ChurchLanguage)
+    private readonly churchLanguageModel: typeof ChurchLanguage,
+
     private readonly utilService: UtilsService,
   ) {}
 
@@ -67,6 +77,42 @@ export class LocationService {
       /* istanbul ignore next */
       throw new HttpException(
         err?.message || 'Failed to create zone',
+        err?.status || HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async createLanguage(createLanguageDto: CreateLanguageDto) {
+    try {
+      const data = await this.languageModel.create({ ...createLanguageDto });
+      return this.utilService.HttpSuccess(
+        HttpStatus.CREATED,
+        'Language created successfully',
+        data,
+      );
+    } catch (err) {
+      /* istanbul ignore next */
+      throw new HttpException(
+        err?.message || 'Failed to create language',
+        err?.status || HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async createChurchLanguage(createChurchLanguageDto: CreateChurchLanguageDto) {
+    try {
+      const data = await this.churchLanguageModel.create({
+        ...createChurchLanguageDto,
+      });
+      return this.utilService.HttpSuccess(
+        HttpStatus.CREATED,
+        'Church language created successfully',
+        data,
+      );
+    } catch (err) {
+      /* istanbul ignore next */
+      throw new HttpException(
+        err?.message || 'Failed to create church language',
         err?.status || HttpStatus.BAD_REQUEST,
       );
     }
@@ -273,12 +319,50 @@ export class LocationService {
         attributes: { exclude: attributesToExclude },
       });
 
-      console.log(zones);
-
       return this.utilService.HttpSuccess(
         HttpStatus.OK,
         'Data retrieved successfully',
         zones,
+      );
+    } catch (err) {
+      /* istanbul ignore next */
+      throw new HttpException(
+        err?.message || 'An error occurred',
+        err?.status || HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async getAllLanguages() {
+    try {
+      const languages = await this.languageModel.findAll({
+        attributes: { exclude: attributesToExclude },
+      });
+
+      return this.utilService.HttpSuccess(
+        HttpStatus.OK,
+        'Data retrieved successfully',
+        languages,
+      );
+    } catch (err) {
+      /* istanbul ignore next */
+      throw new HttpException(
+        err?.message || 'An error occurred',
+        err?.status || HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async getAllChurchLanguages() {
+    try {
+      const churchLanguages = await this.churchLanguageModel.findAll({
+        attributes: { exclude: attributesToExclude },
+      });
+
+      return this.utilService.HttpSuccess(
+        HttpStatus.OK,
+        'Data retrieved successfully',
+        churchLanguages,
       );
     } catch (err) {
       /* istanbul ignore next */
@@ -300,6 +384,48 @@ export class LocationService {
         HttpStatus.OK,
         'Data retrieved successfully',
         zone,
+      );
+    } catch (err) {
+      /* istanbul ignore next */
+      throw new HttpException(
+        err?.message || 'An error occurred',
+        err?.status || HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async getLanguageById(id: string) {
+    try {
+      const language = await this.languageModel.findByPk(id, {
+        attributes: { exclude: attributesToExclude },
+        plain: true,
+      });
+
+      return this.utilService.HttpSuccess(
+        HttpStatus.OK,
+        'Data retrieved successfully',
+        language,
+      );
+    } catch (err) {
+      /* istanbul ignore next */
+      throw new HttpException(
+        err?.message || 'An error occurred',
+        err?.status || HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async getChurchLanguageById(id: string) {
+    try {
+      const churchLanguage = await this.churchLanguageModel.findByPk(id, {
+        attributes: { exclude: attributesToExclude },
+        plain: true,
+      });
+
+      return this.utilService.HttpSuccess(
+        HttpStatus.OK,
+        'Data retrieved successfully',
+        churchLanguage,
       );
     } catch (err) {
       /* istanbul ignore next */

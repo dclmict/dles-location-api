@@ -9,6 +9,8 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from '../decorators';
+import { ConfigService } from '@nestjs/config';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class ApiKeyGuard implements CanActivate {
@@ -33,6 +35,32 @@ export class ApiKeyGuard implements CanActivate {
 
     if (xApiKey !== process.env.X_API_KEY) {
       throw new UnauthorizedException('Invalid API key');
+    }
+
+    return true;
+  }
+}
+
+@Injectable()
+export class GrpcApiKeyGuard implements CanActivate {
+  constructor(private configService: ConfigService) {}
+
+  canActivate(context: ExecutionContext): boolean {
+    const rpcContext = context.switchToRpc();
+    const metadata = rpcContext.getContext();
+
+    // Extract x-api-key from gRPC metadata
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    const apiKeyHeader = metadata.get('x-api-key');
+    const apiKey = Array.isArray(apiKeyHeader) ? apiKeyHeader[0] : apiKeyHeader;
+
+    const validApiKey = this.configService.get<string>('X_API_KEY');
+
+    if (!apiKey || apiKey !== validApiKey) {
+      throw new RpcException({
+        code: 16, // UNAUTHENTICATED
+        message: 'Invalid or missing API key',
+      });
     }
 
     return true;

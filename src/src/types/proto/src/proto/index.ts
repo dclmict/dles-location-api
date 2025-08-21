@@ -10,15 +10,23 @@ import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
 import { Observable } from "rxjs";
 
 /** Payloads */
-export interface GetPoliticalStatePayload {
-  id: string;
-}
-
 export interface GetZonePayload {
   id: string;
 }
 
+export interface GetLanguagePayload {
+  id: string;
+}
+
+export interface GetChurchLanguagePayload {
+  id: string;
+}
+
 export interface GetCountryPayload {
+  id: string;
+}
+
+export interface GetPoliticalStatePayload {
   id: string;
 }
 
@@ -39,23 +47,24 @@ export interface GetDistrictPayload {
 }
 
 /** Responses */
-export interface GetPoliticalStateResponse {
-  political_state?: PoliticalState | undefined;
-}
-
 export interface GetZoneResponse {
   zone?: Zone | undefined;
 }
 
-export interface GetAllZonesPayload {
+export interface GetLanguageResponse {
+  language?: Language | undefined;
 }
 
-export interface GetAllZonesResponse {
-  zones: Zone[];
+export interface GetChurchLanguageResponse {
+  church_language?: ChurchLanguage | undefined;
 }
 
 export interface GetCountryResponse {
   country?: Country | undefined;
+}
+
+export interface GetPoliticalStateResponse {
+  political_state?: PoliticalState | undefined;
 }
 
 export interface GetChurchStateResponse {
@@ -79,6 +88,16 @@ export interface Zone {
   id: string;
   name: string;
   currency: string;
+}
+
+export interface Language {
+  id: string;
+  name: string;
+}
+
+export interface ChurchLanguage {
+  id: string;
+  name: string;
 }
 
 export interface Country {
@@ -123,43 +142,6 @@ export interface District {
   district_group_id: number;
 }
 
-function createBaseGetPoliticalStatePayload(): GetPoliticalStatePayload {
-  return { id: "" };
-}
-
-export const GetPoliticalStatePayload: MessageFns<GetPoliticalStatePayload> = {
-  encode(message: GetPoliticalStatePayload, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.id !== "") {
-      writer.uint32(10).string(message.id);
-    }
-    return writer;
-  },
-
-  decode(input: BinaryReader | Uint8Array, length?: number): GetPoliticalStatePayload {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGetPoliticalStatePayload();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1: {
-          if (tag !== 10) {
-            break;
-          }
-
-          message.id = reader.string();
-          continue;
-        }
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skip(tag & 7);
-    }
-    return message;
-  },
-};
-
 function createBaseGetZonePayload(): GetZonePayload {
   return { id: "" };
 }
@@ -197,6 +179,80 @@ export const GetZonePayload: MessageFns<GetZonePayload> = {
   },
 };
 
+function createBaseGetLanguagePayload(): GetLanguagePayload {
+  return { id: "" };
+}
+
+export const GetLanguagePayload: MessageFns<GetLanguagePayload> = {
+  encode(message: GetLanguagePayload, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetLanguagePayload {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetLanguagePayload();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+};
+
+function createBaseGetChurchLanguagePayload(): GetChurchLanguagePayload {
+  return { id: "" };
+}
+
+export const GetChurchLanguagePayload: MessageFns<GetChurchLanguagePayload> = {
+  encode(message: GetChurchLanguagePayload, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetChurchLanguagePayload {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetChurchLanguagePayload();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+};
+
 function createBaseGetCountryPayload(): GetCountryPayload {
   return { id: "" };
 }
@@ -213,6 +269,43 @@ export const GetCountryPayload: MessageFns<GetCountryPayload> = {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGetCountryPayload();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+};
+
+function createBaseGetPoliticalStatePayload(): GetPoliticalStatePayload {
+  return { id: "" };
+}
+
+export const GetPoliticalStatePayload: MessageFns<GetPoliticalStatePayload> = {
+  encode(message: GetPoliticalStatePayload, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetPoliticalStatePayload {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetPoliticalStatePayload();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -382,43 +475,6 @@ export const GetDistrictPayload: MessageFns<GetDistrictPayload> = {
   },
 };
 
-function createBaseGetPoliticalStateResponse(): GetPoliticalStateResponse {
-  return {};
-}
-
-export const GetPoliticalStateResponse: MessageFns<GetPoliticalStateResponse> = {
-  encode(message: GetPoliticalStateResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.political_state !== undefined) {
-      PoliticalState.encode(message.political_state, writer.uint32(10).fork()).join();
-    }
-    return writer;
-  },
-
-  decode(input: BinaryReader | Uint8Array, length?: number): GetPoliticalStateResponse {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGetPoliticalStateResponse();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1: {
-          if (tag !== 10) {
-            break;
-          }
-
-          message.political_state = PoliticalState.decode(reader, reader.uint32());
-          continue;
-        }
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skip(tag & 7);
-    }
-    return message;
-  },
-};
-
 function createBaseGetZoneResponse(): GetZoneResponse {
   return {};
 }
@@ -456,22 +512,33 @@ export const GetZoneResponse: MessageFns<GetZoneResponse> = {
   },
 };
 
-function createBaseGetAllZonesPayload(): GetAllZonesPayload {
+function createBaseGetLanguageResponse(): GetLanguageResponse {
   return {};
 }
 
-export const GetAllZonesPayload: MessageFns<GetAllZonesPayload> = {
-  encode(_: GetAllZonesPayload, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const GetLanguageResponse: MessageFns<GetLanguageResponse> = {
+  encode(message: GetLanguageResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.language !== undefined) {
+      Language.encode(message.language, writer.uint32(10).fork()).join();
+    }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): GetAllZonesPayload {
+  decode(input: BinaryReader | Uint8Array, length?: number): GetLanguageResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGetAllZonesPayload();
+    const message = createBaseGetLanguageResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.language = Language.decode(reader, reader.uint32());
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -482,22 +549,22 @@ export const GetAllZonesPayload: MessageFns<GetAllZonesPayload> = {
   },
 };
 
-function createBaseGetAllZonesResponse(): GetAllZonesResponse {
-  return { zones: [] };
+function createBaseGetChurchLanguageResponse(): GetChurchLanguageResponse {
+  return {};
 }
 
-export const GetAllZonesResponse: MessageFns<GetAllZonesResponse> = {
-  encode(message: GetAllZonesResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    for (const v of message.zones) {
-      Zone.encode(v!, writer.uint32(10).fork()).join();
+export const GetChurchLanguageResponse: MessageFns<GetChurchLanguageResponse> = {
+  encode(message: GetChurchLanguageResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.church_language !== undefined) {
+      ChurchLanguage.encode(message.church_language, writer.uint32(10).fork()).join();
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): GetAllZonesResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number): GetChurchLanguageResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGetAllZonesResponse();
+    const message = createBaseGetChurchLanguageResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -506,7 +573,7 @@ export const GetAllZonesResponse: MessageFns<GetAllZonesResponse> = {
             break;
           }
 
-          message.zones.push(Zone.decode(reader, reader.uint32()));
+          message.church_language = ChurchLanguage.decode(reader, reader.uint32());
           continue;
         }
       }
@@ -544,6 +611,43 @@ export const GetCountryResponse: MessageFns<GetCountryResponse> = {
           }
 
           message.country = Country.decode(reader, reader.uint32());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+};
+
+function createBaseGetPoliticalStateResponse(): GetPoliticalStateResponse {
+  return {};
+}
+
+export const GetPoliticalStateResponse: MessageFns<GetPoliticalStateResponse> = {
+  encode(message: GetPoliticalStateResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.political_state !== undefined) {
+      PoliticalState.encode(message.political_state, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetPoliticalStateResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetPoliticalStateResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.political_state = PoliticalState.decode(reader, reader.uint32());
           continue;
         }
       }
@@ -751,6 +855,102 @@ export const Zone: MessageFns<Zone> = {
           }
 
           message.currency = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+};
+
+function createBaseLanguage(): Language {
+  return { id: "", name: "" };
+}
+
+export const Language: MessageFns<Language> = {
+  encode(message: Language, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): Language {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseLanguage();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.name = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+};
+
+function createBaseChurchLanguage(): ChurchLanguage {
+  return { id: "", name: "" };
+}
+
+export const ChurchLanguage: MessageFns<ChurchLanguage> = {
+  encode(message: ChurchLanguage, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ChurchLanguage {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseChurchLanguage();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.name = reader.string();
           continue;
         }
       }
@@ -1186,7 +1386,9 @@ export const District: MessageFns<District> = {
 export interface LocationServiceClient {
   getZone(request: GetZonePayload): Observable<GetZoneResponse>;
 
-  getAllZones(request: GetAllZonesPayload): Observable<GetAllZonesResponse>;
+  getLanguage(request: GetLanguagePayload): Observable<GetLanguageResponse>;
+
+  getChurchLanguage(request: GetLanguagePayload): Observable<GetChurchLanguageResponse>;
 
   getCountry(request: GetCountryPayload): Observable<GetCountryResponse>;
 
@@ -1204,9 +1406,13 @@ export interface LocationServiceClient {
 export interface LocationServiceController {
   getZone(request: GetZonePayload): Promise<GetZoneResponse> | Observable<GetZoneResponse> | GetZoneResponse;
 
-  getAllZones(
-    request: GetAllZonesPayload,
-  ): Promise<GetAllZonesResponse> | Observable<GetAllZonesResponse> | GetAllZonesResponse;
+  getLanguage(
+    request: GetLanguagePayload,
+  ): Promise<GetLanguageResponse> | Observable<GetLanguageResponse> | GetLanguageResponse;
+
+  getChurchLanguage(
+    request: GetLanguagePayload,
+  ): Promise<GetChurchLanguageResponse> | Observable<GetChurchLanguageResponse> | GetChurchLanguageResponse;
 
   getCountry(
     request: GetCountryPayload,
@@ -1233,7 +1439,8 @@ export function LocationServiceControllerMethods() {
   return function (constructor: Function) {
     const grpcMethods: string[] = [
       "getZone",
-      "getAllZones",
+      "getLanguage",
+      "getChurchLanguage",
       "getCountry",
       "getPoliticalState",
       "getChurchState",
