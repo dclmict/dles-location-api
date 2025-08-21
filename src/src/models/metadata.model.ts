@@ -14,6 +14,7 @@ import { v6 as uuid } from 'uuid';
 import { LocationBoundary } from './location-boundary.model';
 import { LocationAddress } from './location-address.model';
 import { ChurchLanguage } from './church-language.model';
+import { LGA } from './lga.model';
 
 @Table({
   timestamps: true,
@@ -78,6 +79,10 @@ export class Metadata extends Model {
   @Column({ allowNull: true })
   language_id: string;
 
+  @ForeignKey(() => LGA)
+  @Column({ allowNull: true })
+  lga_id: string;
+
   @HasOne(() => LocationAddress)
   address: LocationAddress;
 
@@ -86,4 +91,7 @@ export class Metadata extends Model {
 
   @BelongsTo(() => ChurchLanguage)
   language: ChurchLanguage;
+
+  @BelongsTo(() => LGA)
+  lga: LGA;
 }
