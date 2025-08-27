@@ -6,6 +6,18 @@
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
+import {
+  type CallOptions,
+  type ChannelCredentials,
+  Client,
+  type ClientOptions,
+  type ClientUnaryCall,
+  type handleUnaryCall,
+  makeGenericClientConstructor,
+  type Metadata,
+  type ServiceError,
+  type UntypedServiceImplementation,
+} from "@grpc/grpc-js";
 import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
 import { Observable } from "rxjs";
 
@@ -46,6 +58,10 @@ export interface GetDistrictPayload {
   id: string;
 }
 
+export interface GetLGAPayload {
+  id: string;
+}
+
 /** Responses */
 export interface GetZoneResponse {
   zone?: Zone | undefined;
@@ -81,6 +97,10 @@ export interface GetGroupResponse {
 
 export interface GetDistrictResponse {
   district?: District | undefined;
+}
+
+export interface GetLGAResponse {
+  lga?: LGA | undefined;
 }
 
 /** Entity Messages */
@@ -119,6 +139,12 @@ export interface ChurchState {
   name: string;
   country_id: string;
   state_country_id: number;
+}
+
+export interface LGA {
+  id: string;
+  name: string;
+  state_id: string;
 }
 
 export interface Region {
@@ -475,6 +501,43 @@ export const GetDistrictPayload: MessageFns<GetDistrictPayload> = {
   },
 };
 
+function createBaseGetLGAPayload(): GetLGAPayload {
+  return { id: "" };
+}
+
+export const GetLGAPayload: MessageFns<GetLGAPayload> = {
+  encode(message: GetLGAPayload, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetLGAPayload {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetLGAPayload();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+};
+
 function createBaseGetZoneResponse(): GetZoneResponse {
   return {};
 }
@@ -796,6 +859,43 @@ export const GetDistrictResponse: MessageFns<GetDistrictResponse> = {
           }
 
           message.district = District.decode(reader, reader.uint32());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+};
+
+function createBaseGetLGAResponse(): GetLGAResponse {
+  return {};
+}
+
+export const GetLGAResponse: MessageFns<GetLGAResponse> = {
+  encode(message: GetLGAResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.lga !== undefined) {
+      LGA.encode(message.lga, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetLGAResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetLGAResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.lga = LGA.decode(reader, reader.uint32());
           continue;
         }
       }
@@ -1173,6 +1273,65 @@ export const ChurchState: MessageFns<ChurchState> = {
   },
 };
 
+function createBaseLGA(): LGA {
+  return { id: "", name: "", state_id: "" };
+}
+
+export const LGA: MessageFns<LGA> = {
+  encode(message: LGA, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+    if (message.state_id !== "") {
+      writer.uint32(26).string(message.state_id);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): LGA {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseLGA();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.name = reader.string();
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.state_id = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+};
+
 function createBaseRegion(): Region {
   return { id: "", name: "", church_state_id: "", region_state_id: 0 };
 }
@@ -1384,55 +1543,77 @@ export const District: MessageFns<District> = {
 };
 
 export interface LocationServiceClient {
-  getZone(request: GetZonePayload): Observable<GetZoneResponse>;
+  getZone(request: GetZonePayload, metadata?: Metadata): Observable<GetZoneResponse>;
 
-  getLanguage(request: GetLanguagePayload): Observable<GetLanguageResponse>;
+  getLanguage(request: GetLanguagePayload, metadata?: Metadata): Observable<GetLanguageResponse>;
 
-  getChurchLanguage(request: GetLanguagePayload): Observable<GetChurchLanguageResponse>;
+  getChurchLanguage(request: GetLanguagePayload, metadata?: Metadata): Observable<GetChurchLanguageResponse>;
 
-  getCountry(request: GetCountryPayload): Observable<GetCountryResponse>;
+  getCountry(request: GetCountryPayload, metadata?: Metadata): Observable<GetCountryResponse>;
 
-  getPoliticalState(request: GetPoliticalStatePayload): Observable<GetPoliticalStateResponse>;
+  getPoliticalState(request: GetPoliticalStatePayload, metadata?: Metadata): Observable<GetPoliticalStateResponse>;
 
-  getChurchState(request: GetChurchStatePayload): Observable<GetChurchStateResponse>;
+  getChurchState(request: GetChurchStatePayload, metadata?: Metadata): Observable<GetChurchStateResponse>;
 
-  getRegion(request: GetRegionPayload): Observable<GetRegionResponse>;
+  getRegion(request: GetRegionPayload, metadata?: Metadata): Observable<GetRegionResponse>;
 
-  getGroup(request: GetGroupPayload): Observable<GetGroupResponse>;
+  getGroup(request: GetGroupPayload, metadata?: Metadata): Observable<GetGroupResponse>;
 
-  getDistrict(request: GetDistrictPayload): Observable<GetDistrictResponse>;
+  getDistrict(request: GetDistrictPayload, metadata?: Metadata): Observable<GetDistrictResponse>;
+
+  getLga(request: GetLGAPayload, metadata?: Metadata): Observable<GetLGAResponse>;
 }
 
 export interface LocationServiceController {
-  getZone(request: GetZonePayload): Promise<GetZoneResponse> | Observable<GetZoneResponse> | GetZoneResponse;
+  getZone(
+    request: GetZonePayload,
+    metadata?: Metadata,
+  ): Promise<GetZoneResponse> | Observable<GetZoneResponse> | GetZoneResponse;
 
   getLanguage(
     request: GetLanguagePayload,
+    metadata?: Metadata,
   ): Promise<GetLanguageResponse> | Observable<GetLanguageResponse> | GetLanguageResponse;
 
   getChurchLanguage(
     request: GetLanguagePayload,
+    metadata?: Metadata,
   ): Promise<GetChurchLanguageResponse> | Observable<GetChurchLanguageResponse> | GetChurchLanguageResponse;
 
   getCountry(
     request: GetCountryPayload,
+    metadata?: Metadata,
   ): Promise<GetCountryResponse> | Observable<GetCountryResponse> | GetCountryResponse;
 
   getPoliticalState(
     request: GetPoliticalStatePayload,
+    metadata?: Metadata,
   ): Promise<GetPoliticalStateResponse> | Observable<GetPoliticalStateResponse> | GetPoliticalStateResponse;
 
   getChurchState(
     request: GetChurchStatePayload,
+    metadata?: Metadata,
   ): Promise<GetChurchStateResponse> | Observable<GetChurchStateResponse> | GetChurchStateResponse;
 
-  getRegion(request: GetRegionPayload): Promise<GetRegionResponse> | Observable<GetRegionResponse> | GetRegionResponse;
+  getRegion(
+    request: GetRegionPayload,
+    metadata?: Metadata,
+  ): Promise<GetRegionResponse> | Observable<GetRegionResponse> | GetRegionResponse;
 
-  getGroup(request: GetGroupPayload): Promise<GetGroupResponse> | Observable<GetGroupResponse> | GetGroupResponse;
+  getGroup(
+    request: GetGroupPayload,
+    metadata?: Metadata,
+  ): Promise<GetGroupResponse> | Observable<GetGroupResponse> | GetGroupResponse;
 
   getDistrict(
     request: GetDistrictPayload,
+    metadata?: Metadata,
   ): Promise<GetDistrictResponse> | Observable<GetDistrictResponse> | GetDistrictResponse;
+
+  getLga(
+    request: GetLGAPayload,
+    metadata?: Metadata,
+  ): Promise<GetLGAResponse> | Observable<GetLGAResponse> | GetLGAResponse;
 }
 
 export function LocationServiceControllerMethods() {
@@ -1447,6 +1628,7 @@ export function LocationServiceControllerMethods() {
       "getRegion",
       "getGroup",
       "getDistrict",
+      "getLga",
     ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
@@ -1461,6 +1643,280 @@ export function LocationServiceControllerMethods() {
 }
 
 export const LOCATION_SERVICE_NAME = "LocationService";
+
+export type LocationServiceService = typeof LocationServiceService;
+export const LocationServiceService = {
+  getZone: {
+    path: "/location.LocationService/GetZone",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: GetZonePayload): Buffer => Buffer.from(GetZonePayload.encode(value).finish()),
+    requestDeserialize: (value: Buffer): GetZonePayload => GetZonePayload.decode(value),
+    responseSerialize: (value: GetZoneResponse): Buffer => Buffer.from(GetZoneResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer): GetZoneResponse => GetZoneResponse.decode(value),
+  },
+  getLanguage: {
+    path: "/location.LocationService/GetLanguage",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: GetLanguagePayload): Buffer => Buffer.from(GetLanguagePayload.encode(value).finish()),
+    requestDeserialize: (value: Buffer): GetLanguagePayload => GetLanguagePayload.decode(value),
+    responseSerialize: (value: GetLanguageResponse): Buffer => Buffer.from(GetLanguageResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer): GetLanguageResponse => GetLanguageResponse.decode(value),
+  },
+  getChurchLanguage: {
+    path: "/location.LocationService/GetChurchLanguage",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: GetLanguagePayload): Buffer => Buffer.from(GetLanguagePayload.encode(value).finish()),
+    requestDeserialize: (value: Buffer): GetLanguagePayload => GetLanguagePayload.decode(value),
+    responseSerialize: (value: GetChurchLanguageResponse): Buffer =>
+      Buffer.from(GetChurchLanguageResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer): GetChurchLanguageResponse => GetChurchLanguageResponse.decode(value),
+  },
+  getCountry: {
+    path: "/location.LocationService/GetCountry",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: GetCountryPayload): Buffer => Buffer.from(GetCountryPayload.encode(value).finish()),
+    requestDeserialize: (value: Buffer): GetCountryPayload => GetCountryPayload.decode(value),
+    responseSerialize: (value: GetCountryResponse): Buffer => Buffer.from(GetCountryResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer): GetCountryResponse => GetCountryResponse.decode(value),
+  },
+  getPoliticalState: {
+    path: "/location.LocationService/GetPoliticalState",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: GetPoliticalStatePayload): Buffer =>
+      Buffer.from(GetPoliticalStatePayload.encode(value).finish()),
+    requestDeserialize: (value: Buffer): GetPoliticalStatePayload => GetPoliticalStatePayload.decode(value),
+    responseSerialize: (value: GetPoliticalStateResponse): Buffer =>
+      Buffer.from(GetPoliticalStateResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer): GetPoliticalStateResponse => GetPoliticalStateResponse.decode(value),
+  },
+  getChurchState: {
+    path: "/location.LocationService/GetChurchState",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: GetChurchStatePayload): Buffer =>
+      Buffer.from(GetChurchStatePayload.encode(value).finish()),
+    requestDeserialize: (value: Buffer): GetChurchStatePayload => GetChurchStatePayload.decode(value),
+    responseSerialize: (value: GetChurchStateResponse): Buffer =>
+      Buffer.from(GetChurchStateResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer): GetChurchStateResponse => GetChurchStateResponse.decode(value),
+  },
+  getRegion: {
+    path: "/location.LocationService/GetRegion",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: GetRegionPayload): Buffer => Buffer.from(GetRegionPayload.encode(value).finish()),
+    requestDeserialize: (value: Buffer): GetRegionPayload => GetRegionPayload.decode(value),
+    responseSerialize: (value: GetRegionResponse): Buffer => Buffer.from(GetRegionResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer): GetRegionResponse => GetRegionResponse.decode(value),
+  },
+  getGroup: {
+    path: "/location.LocationService/GetGroup",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: GetGroupPayload): Buffer => Buffer.from(GetGroupPayload.encode(value).finish()),
+    requestDeserialize: (value: Buffer): GetGroupPayload => GetGroupPayload.decode(value),
+    responseSerialize: (value: GetGroupResponse): Buffer => Buffer.from(GetGroupResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer): GetGroupResponse => GetGroupResponse.decode(value),
+  },
+  getDistrict: {
+    path: "/location.LocationService/GetDistrict",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: GetDistrictPayload): Buffer => Buffer.from(GetDistrictPayload.encode(value).finish()),
+    requestDeserialize: (value: Buffer): GetDistrictPayload => GetDistrictPayload.decode(value),
+    responseSerialize: (value: GetDistrictResponse): Buffer => Buffer.from(GetDistrictResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer): GetDistrictResponse => GetDistrictResponse.decode(value),
+  },
+  getLga: {
+    path: "/location.LocationService/GetLGA",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: GetLGAPayload): Buffer => Buffer.from(GetLGAPayload.encode(value).finish()),
+    requestDeserialize: (value: Buffer): GetLGAPayload => GetLGAPayload.decode(value),
+    responseSerialize: (value: GetLGAResponse): Buffer => Buffer.from(GetLGAResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer): GetLGAResponse => GetLGAResponse.decode(value),
+  },
+} as const;
+
+export interface LocationServiceServer extends UntypedServiceImplementation {
+  getZone: handleUnaryCall<GetZonePayload, GetZoneResponse>;
+  getLanguage: handleUnaryCall<GetLanguagePayload, GetLanguageResponse>;
+  getChurchLanguage: handleUnaryCall<GetLanguagePayload, GetChurchLanguageResponse>;
+  getCountry: handleUnaryCall<GetCountryPayload, GetCountryResponse>;
+  getPoliticalState: handleUnaryCall<GetPoliticalStatePayload, GetPoliticalStateResponse>;
+  getChurchState: handleUnaryCall<GetChurchStatePayload, GetChurchStateResponse>;
+  getRegion: handleUnaryCall<GetRegionPayload, GetRegionResponse>;
+  getGroup: handleUnaryCall<GetGroupPayload, GetGroupResponse>;
+  getDistrict: handleUnaryCall<GetDistrictPayload, GetDistrictResponse>;
+  getLga: handleUnaryCall<GetLGAPayload, GetLGAResponse>;
+}
+
+export interface LocationServiceClient extends Client {
+  getZone(
+    request: GetZonePayload,
+    callback: (error: ServiceError | null, response: GetZoneResponse) => void,
+  ): ClientUnaryCall;
+  getZone(
+    request: GetZonePayload,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: GetZoneResponse) => void,
+  ): ClientUnaryCall;
+  getZone(
+    request: GetZonePayload,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: GetZoneResponse) => void,
+  ): ClientUnaryCall;
+  getLanguage(
+    request: GetLanguagePayload,
+    callback: (error: ServiceError | null, response: GetLanguageResponse) => void,
+  ): ClientUnaryCall;
+  getLanguage(
+    request: GetLanguagePayload,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: GetLanguageResponse) => void,
+  ): ClientUnaryCall;
+  getLanguage(
+    request: GetLanguagePayload,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: GetLanguageResponse) => void,
+  ): ClientUnaryCall;
+  getChurchLanguage(
+    request: GetLanguagePayload,
+    callback: (error: ServiceError | null, response: GetChurchLanguageResponse) => void,
+  ): ClientUnaryCall;
+  getChurchLanguage(
+    request: GetLanguagePayload,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: GetChurchLanguageResponse) => void,
+  ): ClientUnaryCall;
+  getChurchLanguage(
+    request: GetLanguagePayload,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: GetChurchLanguageResponse) => void,
+  ): ClientUnaryCall;
+  getCountry(
+    request: GetCountryPayload,
+    callback: (error: ServiceError | null, response: GetCountryResponse) => void,
+  ): ClientUnaryCall;
+  getCountry(
+    request: GetCountryPayload,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: GetCountryResponse) => void,
+  ): ClientUnaryCall;
+  getCountry(
+    request: GetCountryPayload,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: GetCountryResponse) => void,
+  ): ClientUnaryCall;
+  getPoliticalState(
+    request: GetPoliticalStatePayload,
+    callback: (error: ServiceError | null, response: GetPoliticalStateResponse) => void,
+  ): ClientUnaryCall;
+  getPoliticalState(
+    request: GetPoliticalStatePayload,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: GetPoliticalStateResponse) => void,
+  ): ClientUnaryCall;
+  getPoliticalState(
+    request: GetPoliticalStatePayload,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: GetPoliticalStateResponse) => void,
+  ): ClientUnaryCall;
+  getChurchState(
+    request: GetChurchStatePayload,
+    callback: (error: ServiceError | null, response: GetChurchStateResponse) => void,
+  ): ClientUnaryCall;
+  getChurchState(
+    request: GetChurchStatePayload,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: GetChurchStateResponse) => void,
+  ): ClientUnaryCall;
+  getChurchState(
+    request: GetChurchStatePayload,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: GetChurchStateResponse) => void,
+  ): ClientUnaryCall;
+  getRegion(
+    request: GetRegionPayload,
+    callback: (error: ServiceError | null, response: GetRegionResponse) => void,
+  ): ClientUnaryCall;
+  getRegion(
+    request: GetRegionPayload,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: GetRegionResponse) => void,
+  ): ClientUnaryCall;
+  getRegion(
+    request: GetRegionPayload,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: GetRegionResponse) => void,
+  ): ClientUnaryCall;
+  getGroup(
+    request: GetGroupPayload,
+    callback: (error: ServiceError | null, response: GetGroupResponse) => void,
+  ): ClientUnaryCall;
+  getGroup(
+    request: GetGroupPayload,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: GetGroupResponse) => void,
+  ): ClientUnaryCall;
+  getGroup(
+    request: GetGroupPayload,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: GetGroupResponse) => void,
+  ): ClientUnaryCall;
+  getDistrict(
+    request: GetDistrictPayload,
+    callback: (error: ServiceError | null, response: GetDistrictResponse) => void,
+  ): ClientUnaryCall;
+  getDistrict(
+    request: GetDistrictPayload,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: GetDistrictResponse) => void,
+  ): ClientUnaryCall;
+  getDistrict(
+    request: GetDistrictPayload,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: GetDistrictResponse) => void,
+  ): ClientUnaryCall;
+  getLga(
+    request: GetLGAPayload,
+    callback: (error: ServiceError | null, response: GetLGAResponse) => void,
+  ): ClientUnaryCall;
+  getLga(
+    request: GetLGAPayload,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: GetLGAResponse) => void,
+  ): ClientUnaryCall;
+  getLga(
+    request: GetLGAPayload,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: GetLGAResponse) => void,
+  ): ClientUnaryCall;
+}
+
+export const LocationServiceClient = makeGenericClientConstructor(
+  LocationServiceService,
+  "location.LocationService",
+) as unknown as {
+  new (address: string, credentials: ChannelCredentials, options?: Partial<ClientOptions>): LocationServiceClient;
+  service: typeof LocationServiceService;
+  serviceName: string;
+};
 
 function longToNumber(int64: { toString(): string }): number {
   const num = globalThis.Number(int64.toString());
