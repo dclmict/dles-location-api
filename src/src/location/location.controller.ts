@@ -59,6 +59,8 @@ import {
   GetGroupResponse,
   GetLanguagePayload,
   GetLanguageResponse,
+  GetLGAPayload,
+  GetLGAResponse,
   GetPoliticalStatePayload,
   GetPoliticalStateResponse,
   GetRegionPayload,
@@ -483,5 +485,11 @@ export class GrpcLocationController {
   async getDistrict({ id }: GetDistrictPayload): Promise<GetDistrictResponse> {
     const { data } = await this.locationService.getDistrictById(id);
     return { district: data!.toJSON() };
+  }
+
+  @GrpcMethod('LocationService')
+  async getLGA({ id }: GetLGAPayload): Promise<GetLGAResponse> {
+    const { data } = await this.locationService.getLGAById(id);
+    return { lga: data!.toJSON() };
   }
 }

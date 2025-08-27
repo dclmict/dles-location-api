@@ -11,6 +11,7 @@ service LocationService {
   rpc GetRegion (GetRegionPayload) returns (GetRegionResponse) {};
   rpc GetGroup (GetGroupPayload) returns (GetGroupResponse) {};
   rpc GetDistrict (GetDistrictPayload) returns (GetDistrictResponse) {};
+  rpc GetLGA (GetLGAPayload) returns (GetLGAResponse) {};
 }
 
 // Payloads
@@ -47,6 +48,10 @@ message GetGroupPayload {
 }
 
 message GetDistrictPayload {
+  string id = 1;
+}
+
+message GetLGAPayload {
   string id = 1;
 }
 
@@ -87,6 +92,10 @@ message GetDistrictResponse {
   District district = 1;
 }
 
+message GetLGAResponse {
+  LGA lga = 1;
+}
+
 // Entity Messages
 message Zone {
   string id = 1;
@@ -123,6 +132,12 @@ message ChurchState {
   string name = 2;
   string country_id = 3;
   uint64 state_country_id = 4;
+}
+
+message LGA {
+  string id = 1;
+  string name = 2;
+  string state_id = 3;
 }
 
 message Region {
