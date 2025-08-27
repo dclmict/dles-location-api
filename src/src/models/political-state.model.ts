@@ -24,12 +24,12 @@ export class PoliticalState extends Model {
   declare id: string;
 
   @Column({ type: DataType.STRING, allowNull: false })
-  name: string;
+  declare name: string;
 
   @ForeignKey(() => Country)
   @Column({ allowNull: true })
-  country_id: string;
+  declare country_id: string;
 
   @BelongsTo(() => Country)
-  country: Country;
+  declare country: Country;
 }

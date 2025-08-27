@@ -29,13 +29,13 @@ export class Metadata extends Model {
   declare id: string;
 
   @Column({ type: DataType.STRING(50), allowNull: false })
-  location_id: string;
+  declare location_id: string;
 
   @Column({ type: DataType.STRING(255), allowNull: false })
-  name: string;
+  declare name: string;
 
   @Column({ type: DataType.STRING(50), allowNull: false, unique: true })
-  code: string;
+  declare code: string;
 
   @Column({
     type: DataType.STRING(50),
@@ -44,7 +44,7 @@ export class Metadata extends Model {
       isIn: [Object.values(LOCATION_TYPE)],
     },
   })
-  type: LOCATION_TYPE;
+  declare type: LOCATION_TYPE;
 
   @Column({
     type: DataType.TEXT,
@@ -58,7 +58,7 @@ export class Metadata extends Model {
       this.setDataValue('path', JSON.stringify(value));
     },
   })
-  path: string[];
+  declare path: string[];
 
   @Column({
     type: DataType.STRING(20),
@@ -67,31 +67,31 @@ export class Metadata extends Model {
       isIn: [Object.values(LOCATION_STATUS)],
     },
   })
-  status: LOCATION_STATUS;
+  declare status: LOCATION_STATUS;
 
   @Column({
     type: DataType.STRING(20),
     allowNull: true,
   })
-  admin: string;
+  declare admin: string;
 
   @ForeignKey(() => ChurchLanguage)
   @Column({ allowNull: true })
-  language_id: string;
+  declare language_id: string;
 
   @ForeignKey(() => LGA)
   @Column({ allowNull: true })
-  lga_id: string;
+  declare lga_id: string;
 
   @HasOne(() => LocationAddress)
-  address: LocationAddress;
+  declare address: LocationAddress;
 
   @HasOne(() => LocationBoundary)
-  boundary: LocationBoundary;
+  declare boundary: LocationBoundary;
 
   @BelongsTo(() => ChurchLanguage)
-  language: ChurchLanguage;
+  declare language: ChurchLanguage;
 
   @BelongsTo(() => LGA)
-  lga: LGA;
+  declare lga: LGA;
 }

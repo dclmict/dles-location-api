@@ -55,6 +55,20 @@ async function bootstrap() {
       loader: {
         keepCase: true,
       },
+      channelOptions: {
+        // Connection pooling and keep-alive
+        'grpc.keepalive_time_ms': 10000,
+        'grpc.keepalive_timeout_ms': 5000,
+        'grpc.keepalive_permit_without_calls': true,
+        'grpc.http2.max_pings_without_data': 0,
+
+        // Connection limits
+        'grpc.max_connection_idle_ms': 60000,
+        'grpc.max_connection_age_ms': 300000,
+
+        // Performance tuning
+        'grpc.http2.write_buffer_size': 65536,
+      },
     },
   });
 

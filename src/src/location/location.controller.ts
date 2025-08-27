@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   HttpStatus,
+  Logger,
   Param,
   Post,
   UseGuards,
@@ -425,17 +426,26 @@ export class LocationController {
 @Controller()
 @UseGuards(GrpcApiKeyGuard)
 export class GrpcLocationController {
+  private logger = new Logger(GrpcLocationController.name);
   constructor(private readonly locationService: LocationService) {}
 
   @GrpcMethod('LocationService')
   async getZone({ id }: GetZonePayload): Promise<GetZoneResponse> {
+    const startTime = Date.now();
     const { data } = await this.locationService.getZoneById(id);
+    this.logger.log(
+      `getZone grpc method took ${(Date.now() - startTime) / 1000}s`,
+    );
     return { zone: data!.toJSON() };
   }
 
   @GrpcMethod('LocationService')
   async getLanguage({ id }: GetLanguagePayload): Promise<GetLanguageResponse> {
+    const startTime = Date.now();
     const { data } = await this.locationService.getLanguageById(id);
+    this.logger.log(
+      `getLanguage grpc method took ${(Date.now() - startTime) / 1000}s`,
+    );
     return { language: data!.toJSON() };
   }
 
@@ -443,13 +453,21 @@ export class GrpcLocationController {
   async getChurchLanguage({
     id,
   }: GetChurchLanguagePayload): Promise<GetChurchLanguageResponse> {
+    const startTime = Date.now();
     const { data } = await this.locationService.getChurchLanguageById(id);
+    this.logger.log(
+      `getChurchLanguage grpc method took ${(Date.now() - startTime) / 1000}s`,
+    );
     return { church_language: data!.toJSON() };
   }
 
   @GrpcMethod('LocationService')
   async getCountry({ id }: GetCountryPayload): Promise<GetCountryResponse> {
+    const startTime = Date.now();
     const { data } = await this.locationService.getCountryById(id);
+    this.logger.log(
+      `getCountry grpc method took ${(Date.now() - startTime) / 1000}s`,
+    );
     return { country: data!.toJSON() };
   }
 
@@ -457,7 +475,11 @@ export class GrpcLocationController {
   async getPoliticalState({
     id,
   }: GetPoliticalStatePayload): Promise<GetPoliticalStateResponse> {
+    const startTime = Date.now();
     const { data } = await this.locationService.getPoliticalStateById(id);
+    this.logger.log(
+      `getPoliticalState grpc method took ${(Date.now() - startTime) / 1000}s`,
+    );
     return { political_state: data!.toJSON() };
   }
 
@@ -465,31 +487,51 @@ export class GrpcLocationController {
   async getChurchState({
     id,
   }: GetChurchStatePayload): Promise<GetChurchStateResponse> {
+    const startTime = Date.now();
     const { data } = await this.locationService.getChurchStateById(id);
+    this.logger.log(
+      `getChurchState grpc method took ${(Date.now() - startTime) / 1000}s`,
+    );
     return { church_state: data!.toJSON() };
   }
 
   @GrpcMethod('LocationService')
   async getRegion({ id }: GetRegionPayload): Promise<GetRegionResponse> {
+    const startTime = Date.now();
     const { data } = await this.locationService.getRegionById(id);
+    this.logger.log(
+      `getRegion grpc method took ${(Date.now() - startTime) / 1000}s`,
+    );
     return { region: data!.toJSON() };
   }
 
   @GrpcMethod('LocationService')
   async getGroup({ id }: GetGroupPayload): Promise<GetGroupResponse> {
+    const startTime = Date.now();
     const { data } = await this.locationService.getGroupById(id);
+    this.logger.log(
+      `getGroup grpc method took ${(Date.now() - startTime) / 1000}s`,
+    );
     return { group: data!.toJSON() };
   }
 
   @GrpcMethod('LocationService')
   async getDistrict({ id }: GetDistrictPayload): Promise<GetDistrictResponse> {
+    const startTime = Date.now();
     const { data } = await this.locationService.getDistrictById(id);
+    this.logger.log(
+      `getDistrict grpc method took ${(Date.now() - startTime) / 1000}s`,
+    );
     return { district: data!.toJSON() };
   }
 
   @GrpcMethod('LocationService')
   async getLGA({ id }: GetLGAPayload): Promise<GetLGAResponse> {
+    const startTime = Date.now();
     const { data } = await this.locationService.getLGAById(id);
+    this.logger.log(
+      `getLGA grpc method took ${(Date.now() - startTime) / 1000}s`,
+    );
     return { lga: data!.toJSON() };
   }
 }

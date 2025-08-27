@@ -24,15 +24,15 @@ export class Region extends Model {
   declare id: string;
 
   @Column({ type: DataType.STRING, allowNull: false })
-  name: string;
+  declare name: string;
 
   @ForeignKey(() => ChurchState)
   @Column({ allowNull: false })
-  church_state_id: string;
+  declare church_state_id: string;
 
   @Column({ allowNull: false, type: DataType.INTEGER })
-  region_state_id: number;
+  declare region_state_id: number;
 
   @BelongsTo(() => ChurchState)
-  church_state: ChurchState;
+  declare church_state: ChurchState;
 }

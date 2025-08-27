@@ -25,15 +25,15 @@ export class LGA extends Model {
   declare id: string;
 
   @Column({ type: DataType.STRING, allowNull: false })
-  name: string;
+  declare name: string;
 
   @ForeignKey(() => PoliticalState)
   @Column({ allowNull: false })
-  state_id: string;
+  declare state_id: string;
 
   @BelongsTo(() => PoliticalState)
-  state: PoliticalState;
+  declare state: PoliticalState;
 
   @HasMany(() => Metadata)
-  metadata: Metadata[];
+  declare metadata: Metadata[];
 }

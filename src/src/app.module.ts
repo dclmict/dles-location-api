@@ -38,6 +38,12 @@ import { MetadataModule } from './metadata/metadata.module';
       autoLoadModels: true,
       synchronize: true,
       sync: {},
+      pool: {
+        max: 50, // Increase max connections
+        min: 14, // Increase min connections
+        acquire: 60000, // Increase acquire timeout
+        idle: 10000,
+      },
       logging: console.log,
     }),
     LocationModule,

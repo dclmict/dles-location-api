@@ -375,6 +375,8 @@ export class LocationService {
 
   async getZoneById(id: string) {
     try {
+      const start = Date.now();
+      console.log(`Raw DB time: ${Date.now() - start}ms`);
       const zone = await this.zoneModel.findByPk(id, {
         attributes: { exclude: attributesToExclude },
         plain: true,

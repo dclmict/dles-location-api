@@ -24,15 +24,15 @@ export class District extends Model {
   declare id: string;
 
   @Column({ type: DataType.STRING, allowNull: false })
-  name: string;
+  declare name: string;
 
   @ForeignKey(() => Group)
   @Column({ allowNull: false })
-  group_id: string;
+  declare group_id: string;
 
   @Column({ allowNull: false, type: DataType.INTEGER })
-  district_group_id: number;
+  declare district_group_id: number;
 
   @BelongsTo(() => Group)
-  group: Group;
+  declare group: Group;
 }

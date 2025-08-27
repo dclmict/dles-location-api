@@ -24,18 +24,18 @@ export class Country extends Model {
   declare id: string;
 
   @Column({ type: DataType.STRING, allowNull: false })
-  name: string;
+  declare name: string;
 
   @Column({ type: DataType.STRING, allowNull: false })
-  code: string;
+  declare code: string;
 
   @Column({ type: DataType.STRING, allowNull: false })
-  flag: string;
+  declare flag: string;
 
   @ForeignKey(() => Zone)
   @Column({ allowNull: true })
-  zone_id: string;
+  declare zone_id: string;
 
   @BelongsTo(() => Zone)
-  zone: Zone;
+  declare zone: Zone;
 }

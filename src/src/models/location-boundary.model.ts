@@ -26,10 +26,10 @@ export class LocationBoundary extends Model {
 
   @ForeignKey(() => Metadata)
   @Column({ type: DataType.STRING(50), allowNull: false })
-  metadata_id: string;
+  declare metadata_id: string;
 
   @BelongsTo(() => Metadata)
-  metadata: Metadata;
+  declare metadata: Metadata;
 
   @Column({
     type: DataType.TEXT,
@@ -43,7 +43,7 @@ export class LocationBoundary extends Model {
       this.setDataValue('boundary_geojson', JSON.stringify(value));
     },
   })
-  boundary_geojson: object;
+  declare boundary_geojson: object;
 
   @Column({
     type: DataType.STRING(50),
@@ -52,8 +52,8 @@ export class LocationBoundary extends Model {
       isIn: [Object.values(METADATA_BOUNDARY_TYPE)],
     },
   })
-  boundary_type: METADATA_BOUNDARY_TYPE;
+  declare boundary_type: METADATA_BOUNDARY_TYPE;
 
   @Column({ type: DataType.STRING(50), defaultValue: 'Africa/Lagos' })
-  timezone: string;
+  declare timezone: string;
 }

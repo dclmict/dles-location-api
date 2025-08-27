@@ -24,26 +24,26 @@ export class LocationAddress extends Model {
 
   @ForeignKey(() => Metadata)
   @Column({ type: DataType.STRING(50), allowNull: false })
-  metadata_id: string;
+  declare metadata_id: string;
 
   @BelongsTo(() => Metadata)
-  metadata: Metadata;
+  declare metadata: Metadata;
 
   @Column({ type: DataType.TEXT, allowNull: true })
-  street: string;
+  declare street: string;
 
   @Column({ type: DataType.STRING(100), allowNull: true })
-  city: string;
+  declare city: string;
 
   @Column({ type: DataType.STRING(100), allowNull: true })
-  state: string;
+  declare state: string;
 
   @Column({ type: DataType.STRING(100), allowNull: true })
-  country: string;
+  declare country: string;
 
   @Column({ type: DataType.STRING(20), allowNull: true })
-  postal_code: string;
+  declare postal_code: string;
 
   @Column({ type: DataType.BOOLEAN, defaultValue: true })
-  is_primary: boolean;
+  declare is_primary: boolean;
 }

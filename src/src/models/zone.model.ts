@@ -21,8 +21,8 @@ export class Zone extends Model {
   declare id: string;
 
   @Column({ type: DataType.STRING, allowNull: false })
-  name: string;
+  declare name: string;
 
   @Column({ type: DataType.STRING, allowNull: false })
-  currency: string;
+  declare currency: string;
 }
